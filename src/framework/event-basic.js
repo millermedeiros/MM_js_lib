@@ -61,6 +61,7 @@
 	
 	/**
 	 * Call all the functions that were registered to the DOM Ready Event (not a real Event Dispatcher)
+	 * @private
 	 */
 	function dispatchDOMReady(){
 		if(isDOMReady) return;
@@ -76,6 +77,7 @@
 	/**
 	 * Add DOM Ready Event Listener
 	 * - based on jQuery (http://jquery.com/) solution.
+	 * @private
 	 */
 	function bindReady(){
 		if(isReadyBound) return;
