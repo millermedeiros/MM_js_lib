@@ -35,5 +35,24 @@
 		l.href = url;
 		head.appendChild(l);
 	}
-
+	
+	//TODO: Maybe add callback function or event dispatching after script/css loading. 
+	
+	/*
+		# Information copied from YUI3 `get.js` file
+		# used for reference if I decide to implement loadComplete functionality in the future.
+	
+		IE supports the readystatechange event for script and css nodes
+		Opera only for script nodes.  Opera support onload for script
+		nodes, but this doesn't fire when there is a load failure.
+		The onreadystatechange appears to be a better way to 
+		respond to both success and failure.
+		
+		Safari 3.x supports the load event for script nodes (DOM2)
+		
+		Firefox and Opera support onload (but not DOM2 in FF) handlers for
+		script nodes. Opera, but not FF, supports the onload event for link
+		nodes.
+	*/
+	
 })();
