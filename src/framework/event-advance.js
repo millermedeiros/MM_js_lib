@@ -7,8 +7,8 @@
  */
 (function(){
 	
-	this.MM = this.MM? this.MM : {};
-	MM.event = MM.event? MM.event : {};
+	this.MM = this.MM || {};
+	MM.event = MM.event || {};
 	
 	/**
 	 * Prevent Default Behavior

@@ -9,9 +9,15 @@
 	<body>
 		<div id="holder">&nbsp;</div>
 		<script type="text/javascript">
-			MM.loader.loadScript('http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js');
-			MM.loader.loadScript('http://swffit.millermedeiros.com/swffit.js');
-			MM.loader.loadStyleSheet('http://swffit.millermedeiros.com/css/style.css');
+			MM.loader.loadScript('http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', loadScript2);
+			
+			function loadScript2(){
+				MM.loader.loadScript('http://swffit.millermedeiros.com/swffit.js', 
+					function(){
+						MM.loader.loadStyleSheet('http://swffit.millermedeiros.com/css/style.css');
+					}
+				);
+			}
 		</script>
 	</body>
 </html>

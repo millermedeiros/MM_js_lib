@@ -6,9 +6,11 @@
  */
 (function(){
 	
+	//TODO: Refactor all methods. Find better names for `inherit` and `aggregate` also remove `abstractBind`.
+	
 	//instantiate main objects if it doesn't exist
-	this.MM = this.MM? MM : {};
-	MM.oop = MM.oop? MM.oop : {};
+	this.MM = this.MM || {};
+	MM.oop = MM.oop || {};
 	
 	/**
 	 * Copy properties from one Object to another

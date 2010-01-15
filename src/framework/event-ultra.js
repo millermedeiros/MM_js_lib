@@ -6,10 +6,11 @@
  * @version 0.1.2 (2010/01/10)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
+/*requires ./event-advance.js*/
 (function(){
 	
-	this.MM = this.MM? this.MM : {};
-	MM.event = MM.event? MM.event : {};
+	this.MM = this.MM || {};
+	MM.event = MM.event || {};
 	
 	/**
 	* Get Related Target (`mouseover` or `mouseout` previous target)

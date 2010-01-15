@@ -11,26 +11,37 @@
 		<script type="text/javascript">
 			var xhr = new MM.XHR();
 			console.log(xhr);
-			xhr.send(
-				{
-					method : 'GET',
-					url : 'http://www.millermedeiros.com/',
-					async : true,
-					user : null,
-					password : null,
-					/* */
-					data : 'lorem=ipsum&foo=bar'
-					/* * /
-					data : {
-						lorem : ipsum,
-						foo : bar 
-					}
-					/* */ 
-				}, 
-				function(r){
-					console.log('lorem:', r)
+			
+			var opt = {
+				method : 'GET',
+				url : './oop.html',
+				/* * /
+				user : null,
+				password : null,
+				/* */
+				/* * /
+				data : 'lorem=ipsum&foo=bar',
+				/* * /
+				data : {
+					lorem : ipsum,
+					foo : bar 
+				},
+				/* */
+				async : true
+			};
+			
+			function callback(r){
+				console.log('response:', r);
+				if(r.success){
+					document.getElementById('holder').innerHTML = r.responseText;
+				}else{
+					console.error('XHR Error: ', r.status, ' - ', r.statusText);
 				}
-			);
+			}
+			
+			//send
+			xhr.send(opt, callback);
+			
 		</script>
 	</body>
 </html>

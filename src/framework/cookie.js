@@ -7,8 +7,8 @@
  */
 (function(){
 	
-	this.MM = this.MM? this.MM : {};
-	MM.cookie = MM.cookie? MM.cookie : {};
+	this.MM = this.MM || {};
+	MM.cookie = MM.cookie || {};
 	
 	//TODO: add subcookies support
 	

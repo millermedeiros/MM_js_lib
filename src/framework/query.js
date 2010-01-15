@@ -7,8 +7,8 @@
  */
 (function(){
 	
-	this.MM = this.MM? this.MM : {};
-	MM.query = MM.query? MM.query : {};
+	this.MM = this.MM || {};
+	MM.query = MM.query || {};
 	
 	/**
 	 * Get full query as string with all special chars decoded.
