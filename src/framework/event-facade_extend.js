@@ -1,12 +1,11 @@
 /**
- * MM.event - Ultra
- * - event utilities rarely used. 
- * - based on Nicholas C. Zackas <http://www.nczonline.net> and Peter-Paul Koch <http://www.quirksmode.org> solutions.
+ * MM.event - Facade Extend
+ * - cross-browser event methods.
  * @author Miller Medeiros <http://www.millermedeiros.com>
- * @version 0.1.2 (2010/01/10)
+ * @version 0.1 (2010/01/15)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-/*requires ./event-advance.js*/
+/*requires ./event-facade.js*/
 (function(){
 	
 	this.MM = this.MM || {};
@@ -29,13 +28,13 @@
 	}
 	
 	/**
-	 * Get pressed button
+	 * Get pressed mouse button.
 	 * @param {Event} e `mouseup` or `mousedown` Event 
 	 */
-	MM.event.getButton = function(e){
+	MM.event.getMouseButton = function(e){
 		e = MM.event.getEvent(e);
 		var b = e.button;
-		return (document.implementation.hasFeature("MouseEvents", "2.0"))? b : ((b === 4)? 1 : ((b === 2 || b === 6)? 2 : 0));
+		return (document.implementation.hasFeature('MouseEvents', '2.0'))? b : ((b === 4)? 1 : ((b === 2 || b === 6)? 2 : 0));
 	}
 	
 	/**

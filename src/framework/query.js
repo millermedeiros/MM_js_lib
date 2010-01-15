@@ -11,7 +11,7 @@
 	MM.query = MM.query || {};
 	
 	/**
-	 * Get full query as string with all special chars decoded.
+	 * Gets full query as string with all special chars decoded.
 	 * @return {String}	Query string.
 	 */
 	MM.query.getQueryString = function(){
@@ -19,7 +19,7 @@
 	}
 	
 	/**
-	* Get query as Object.
+	* Gets query as Object.
 	* @return {Object}	Object with all the query "params => values" pairs.
 	*/
 	MM.query.getQueryObject = function(){
@@ -34,7 +34,7 @@
 	}
 	
 	/**
-	* Get parameter from query.
+	* Gets parameter from query.
 	* @return {String}	Parameter value.
 	*/
 	MM.query.getParam = function(param){

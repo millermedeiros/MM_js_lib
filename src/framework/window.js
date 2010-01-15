@@ -7,8 +7,8 @@
  */
 (function(){
 	
-	this.MM = this.MM? this.MM : {};
-	MM.window = MM.window? MM.window : {};
+	this.MM = this.MM || {};
+	MM.window = MM.window || {};
 	
 	var doc = document,
 		win = window;

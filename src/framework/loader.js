@@ -10,6 +10,9 @@
 	this.MM = this.MM || {};
 	MM.loader = MM.loader || {};
 	
+	//TODO: check if load failed? (not sure if 'onerror' and readyState works properly, maybe will need to check timeout)
+	//TODO: test if loaded script can really be executed during callback.
+	
 	/**
 	 * Load external JavaScript file into the current HTML.
 	 * @param {String} url Path to the desired file.
@@ -17,9 +20,11 @@
 	 */
 	MM.loader.loadScript = function(url, callback){
 		//based on Nicholas Zackas solution (http://www.nczonline.net/blog/2009/07/28/the-best-way-to-load-external-javascript/)
-		//TODO: check if load failed? (not sure if 'onerror' works and also readyState, maybe will need to check timeout)
 		var head = document.getElementsByTagName("head")[0], 
-			s = document.createElement('script');
+			s = document.createElement('script'),
+			onComplete = function(){ //called after load finished
+				setTimeout(callback, 0); //ensure that script is ready to execute.
+			};
 			
 		s.type = 'text/javascript';
 		
@@ -28,13 +33,13 @@
 				var rs = s.readyState; 
 				if(rs === 'loaded' || rs === 'complete'){
 					s.onreadystatechange = null;
-					callback();
+					onComplete();
 			    }
 			};
 		}else{ //other browsers
 			s.onload = function(){
 				s.onload = null;
-				callback();
+				onComplete();
 			};
 		}
 		//start loading

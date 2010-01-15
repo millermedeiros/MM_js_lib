@@ -40,28 +40,23 @@ PS: Probably I won't implement most of the features that exist on the major fram
 
 ## Should I use it? ##
 
-This library was designed for *intermediate* to *advanced* JavaScript developers, if you're starting with JavaScript development I recommend using a framework that you can easily find tutorials on the internet as [jQuery](http://jquery.com), [MooTools](http://mootools.net) and [prototype](http://www.prototypejs.org/) instead.
+This library was designed for *intermediate* to *advanced* JavaScript developers, if you're starting with JavaScript development I recommend using a framework that you can easily find tutorials on the internet, such as [jQuery](http://jquery.com), [MooTools](http://mootools.net) and [prototype](http://www.prototypejs.org/).
 
 If you're building desktop-like applications it's better to use a JavaScript Framework that already has GUI widgets. Check the [comparison list of JavaScript frameworks on Wikipedia](http://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks) to know the differences between each framework.
 
-This library was created mainly to be used on small to medium sites.
+This library was created mainly to be used on small to medium web sites.
 
 
 ## Important ##
 
- - All code here is released under the [MIT License](http://www.opensource.org/licenses/mit-license.php) unless otherwise noted.
  - **This Library is on an early beta state and no proper testing was done (bugs are expected).**
+ - All code here is released under the [MIT License](http://www.opensource.org/licenses/mit-license.php) unless otherwise noted.
  - I don't give any kind of support on how to use these files.
  - Files/Folders may disappear. APIs may change. Things may break.
  - Almost everything is a work in progress.
- - I will only test the code on the specified versions and also on the latest non-beta version of these browsers:
- 	- IE 6+
- 	- Firefox
- 	- Opera
- 	- Safari
- 	- Chrome
  - This library is only intended to work on well-formed HTML files, so always use the proper doctype (strict or transitional) and validade your HTML/XHTML.
  - Some functionalities may not work properly on specific mobile devices.
+ - I will only test the code on the latest non-beta version of Firefox, Safari, Chrome, Opera and also IE6+.
 
 ----
 

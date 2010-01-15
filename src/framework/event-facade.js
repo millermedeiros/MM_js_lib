@@ -1,6 +1,6 @@
 /**
- * MM.event - Advance
- * - event utilities not frequently used.
+ * MM.event - Facade
+ * - cross-browser event methods.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
  * @version 0.1.2 (2010/01/10)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -10,28 +10,30 @@
 	this.MM = this.MM || {};
 	MM.event = MM.event || {};
 	
+	//TODO: maybe change the structure to a custom Event Object that abstracts the DOM Events instead of a Facade (I think it's a better approach - easier to use and will be more similar to the W3C standard)
+	
 	/**
-	 * Prevent Default Behavior
+	 * Prevents Default Behavior
 	 * @param {Event} e Event
 	 */
 	MM.event.preventDefault = function(e){
 		e = MM.event.getEvent(e);
-		if (e.preventDefault) e.preventDefault();
+		if(e.preventDefault) e.preventDefault();
 		else e.returnValue = false;
 	}
 	
 	/**
-	 * Stop Event Propagation (Bubbling)
+	 * Stops Event Propagation (Bubbling)
 	 * @param {Event} e Event
 	 */
 	MM.event.stopPropagation = function(e){
 		e = MM.event.getEvent(e);
-		if (e.stopPropagation) e.stopPropagation();
+		if(e.stopPropagation) e.stopPropagation();
 		else e.cancelBubble = true;
 	}
 	
 	/**
-	 * Stop default behavior and propagation
+	 * Stops default behavior and propagation
 	 * @param {Event} e Event
 	 */
 	MM.event.halt = function(e){
@@ -40,7 +42,7 @@
 	}
 	
 	/**
-	 * Get Event
+	 * Gets Event
 	 * @param {Event} e Event
 	 */
 	MM.event.getEvent = function(e){
@@ -48,7 +50,7 @@
 	}
 	
 	/**
-	 * Get Event Target
+	 * Gets Event Target
 	 * @param {Event} e Event
 	 */
 	MM.event.getTarget = function(e){

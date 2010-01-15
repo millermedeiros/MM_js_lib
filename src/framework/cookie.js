@@ -13,7 +13,7 @@
 	//TODO: add subcookies support
 	
 	/**
-	 * Set a Cookie
+	 * Sets a Cookie
 	 * @param {String} name Cookie name.
 	 * @param {String} val Cookie value.
 	 * @param {Object} [opt] Cookie options Object {expires:Date, path:String, domain:String, secure:Boolean}.
@@ -30,7 +30,7 @@
 	};
 	
 	/**
-	 * Get cookie value
+	 * Gets cookie value
 	 * @param {String} name Cookie name.
 	 * @return {String} Cookie value.
 	 */
@@ -40,7 +40,7 @@
 	};
 	
 	/**
-	 * Get cookie as an Object (URI decoded)
+	 * Gets cookie as an Object (URI decoded)
 	 * @return {Object} Cookie as Object {cookieName1: cookieValue1, ...}
 	 */
 	MM.cookie.getCookieObject = function(){
@@ -55,7 +55,7 @@
 	}
 	
 	/**
-	 * Set cookie expiration to a past Date removing it
+	 * Sets cookie expiration to a past Date removing it
 	 * - obs: cookie options should match to properly unset.
 	 * @param {String} name Cookie Name
 	 * @param {Object} [opt] Cookie Options Object {expires:Date, path:String, domain:String, secure:Boolean}
@@ -67,7 +67,7 @@
 	};
 	
 	/**
-	 * Check if cookie is set
+	 * Checks if cookie is set
 	 * @return {Boolean} if cookie exist
 	 */
 	MM.cookie.isset = function(name){
