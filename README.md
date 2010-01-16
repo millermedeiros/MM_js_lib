@@ -9,7 +9,7 @@ This is a collection of JavaScript *objects*/*helpers*/*methods* created for per
 
 It was created to be used when only some specific features are required avoiding the use of a full bloated frameworks if it isn't necessary.
 
-It was also created because I don't agree with some frameworks APIs and also the coding style that they "enforce".
+It was also created because I don't agree with some frameworks APIs and the coding style that they "enforce".
 
 The main goals of this library is to:
 
@@ -18,8 +18,8 @@ The main goals of this library is to:
  - be easy to debug;
  - be easy to maintain;
  - follow best practices;
- - follow standards when possible (preferably same API than native Objects);
- - don't try to convert JavaScript into another language!
+ - follow standards when possible;
+ - **don't try to convert JavaScript into another language!**
  - be compatible with other frameworks;
  - be simple;
  - be small;
@@ -33,7 +33,6 @@ It was heavily inspired by other frameworks and other people work/articles/ideas
  - [MooTools](http://mootools.net/)
  - [YUI3](http://developer.yahoo.com/yui/3/)
  - [Thomas Fuchs](http://mir.aculo.us/)
- - [Douglas Crockford](http://www.crockford.com/)
 
 PS: Probably I won't implement most of the features that exist on the major frameworks.
 
