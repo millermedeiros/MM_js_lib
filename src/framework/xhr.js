@@ -122,8 +122,8 @@
 		
 		if(this.async) xhr.onreadystatechange = _onStateChange; //should come before open.
 		
-		if(this.user){
-			xhr.open(this.method, this.url, this.async, this.user, this.password); //according to jQuery source code passing null to 'user' shows login pop on Opera.
+		if(this.user){ //according to jQuery source code passing null to 'user' shows login pop on Opera.
+			xhr.open(this.method, this.url, this.async, this.user, this.password); 
 		}else{
 			xhr.open(this.method, this.url, this.async);
 		}
