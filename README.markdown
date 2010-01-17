@@ -37,7 +37,8 @@ It was also created because I don't agree with some frameworks APIs and the codi
  - This library is only intended to work on well-formed HTML files, so always use the proper doctype (strict or transitional) and validate your HTML/XHTML.
  - Some functionalities may not work properly on specific mobile devices.
  - I will probably only test the code on the latest non-beta version of Firefox, Safari, Chrome, Opera and also IE6+.
-
+ - Probably It will never have most of the features that exist on the major frameworks.
+ 
 
 ## Should I use it? ##
 
@@ -81,8 +82,6 @@ It was heavily inspired by other frameworks and other people work/articles/ideas
  - [MooTools](http://mootools.net/)
  - [YUI3](http://developer.yahoo.com/yui/3/)
  - [Thomas Fuchs](http://mir.aculo.us/)
-
-PS: Probably It will never have most of the features that exist on the major frameworks.
 
 
 ----
