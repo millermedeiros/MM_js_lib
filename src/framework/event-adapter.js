@@ -1,5 +1,5 @@
 /**
- * MM.event - Facade
+ * MM.event - Adapter
  * - cross-browser event methods.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
  * @version 0.1.2 (2010/01/10)
@@ -10,7 +10,7 @@
 	this.MM = this.MM || {};
 	MM.event = MM.event || {};
 	
-	//TODO: maybe change the structure to a custom Event Object that abstracts the DOM Events instead of a Facade (I think it's a better approach - easier to use and will be more similar to the W3C standard)
+	//XXX: maybe change the structure to a custom Event Object that abstracts the DOM Events instead of an Adapter (I think it's a better approach - easier to use and will be more similar to the W3C standard)
 	
 	/**
 	 * Prevents Default Behavior

@@ -1,11 +1,11 @@
 /**
- * MM.event - Facade Extend
+ * MM.event - Adapter Extend
  * - cross-browser event methods.
  * @author Miller Medeiros <http://www.millermedeiros.com>
  * @version 0.1 (2010/01/15)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-/*requires ./event-facade.js*/
+/*requires ./event-adapter.js*/
 (function(){
 	
 	this.MM = this.MM || {};

@@ -56,7 +56,7 @@
 	
 	/**
 	 * Sets cookie expiration to a past Date removing it
-	 * - obs: cookie options should match to properly unset.
+	 * - obs: cookie options should match with the existing cookie to properly unset it.
 	 * @param {String} name Cookie Name
 	 * @param {Object} [opt] Cookie Options Object {expires:Date, path:String, domain:String, secure:Boolean}
 	 */

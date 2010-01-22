@@ -10,7 +10,7 @@
 	this.MM = this.MM || {};
 	MM.loader = MM.loader || {};
 	
-	//TODO: check if load failed? (not sure if 'onerror' and readyState works properly, maybe will need to check timeout)
+	//XXX: check if load failed? (not sure if 'onerror' and readyState works properly, maybe will need to check timeout)
 	//TODO: test if loaded script can really be executed during callback.
 	
 	/**
@@ -23,7 +23,7 @@
 		var head = document.getElementsByTagName("head")[0], 
 			s = document.createElement('script'),
 			onComplete = function(){ //called after load finished
-				setTimeout(callback, 0); //ensure that script is ready to execute.
+				setTimeout(callback, 0); //ensure that script is ready to execute. (not sure if it really works)
 			};
 			
 		s.type = 'text/javascript';

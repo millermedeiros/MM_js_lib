@@ -10,6 +10,10 @@
 	this.MM = this.MM || {};
 	MM.query = MM.query || {};
 	
+	//TODO: create method that converts Object into query string.
+	//TODO: create method that adds new values to the query string.
+	//TODO: create method that checks if param exists. 
+	
 	/**
 	 * Gets full query as string with all special chars decoded.
 	 * @return {String}	Query string.
