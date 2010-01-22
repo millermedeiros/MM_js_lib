@@ -14,33 +14,54 @@
 		<div id="holder">&nbsp;</div>
 		<script type="text/javascript">
 			var obj = { a: 123,
-						testBind: function(evt){
-							console.log("testBind: ", this.a ," | ", evt);
+						testBind: function(arg1){
+							console.log("testBind: ", this.a ," | ", arg1);
 						},
-						testBindArgs: function(arg1, arg2, evt){
-							console.log("testBindArgs: ", this.a ," | ", arg1 ," | ", arg2 ," | ", evt);
+						testBindArgs: function(arg1, arg2, arg3){
+							console.log("testBindArgs: ", this.a ," | ", arg1 ," | ", arg2 ," | ", arg3);
 						}
 				},
 				ext = { b: 456,
 						testCurry: function(num1, num2){
-							console.log("testCurry: ", num1 ," | ", num2);
+							console.log("testCurry: ", num1 ," + ", num2 ," = ", num1+num2 );
 						}					
+				},
+				ext2 = {
+					c: 789
 				};
 				
-			//# Aggregate
-			console.log("obj: ", obj ," | ext: ", ext);
-			MM.oop.aggregate(obj, ext);
-			console.log("oop.aggregate(obj, ext): ", obj); // test aggregate
+			//# MixIn
+			console.log("obj: ", obj ," | ext: ", ext ," | ext2: ", ext2);
+			var mix = MM.oop.mixIn(obj, ext, ext2);
+			console.log("MM.oop.mixIn(obj, ext): ", mix); // test mixIn
 			
 			//## Bind
 			MM.event.addListener(document.getElementById('holder'), "click", MM.oop.bind(obj.testBind, obj)); //test bind
 			MM.event.addListener(document.getElementById('holder'), "click", MM.oop.bind(obj.testBindArgs, obj, "z", "x")); //test bind with arguments
+			MM.event.addListener(document.getElementById('holder'), "click", MM.oop.rbind(obj.testBindArgs, obj, "z", "x")); //test bind with arguments
 			
 			//## Curry
 			ext.testCurry(5,15);
 			var curried = MM.oop.curry(ext.testCurry, 10);
 			curried(3);
 			curried(7);
+			
+			//## Create
+			var created = MM.oop.createObject(mix, {d: 987});
+			console.log("MM.oop.createObject(mix, {d: 01234}): ", created);
+			
+			//## Inherit prototype
+			function Parent(){
+				this.foo = "bar";
+			};
+			Parent.prototype.lorem = "ipsum";
+			console.log("new Parent(): ", new Parent());
+			function Child(){
+				this.a = "abc";
+			}
+			console.log("new Child(): ", new Child());
+			MM.oop.inheritPrototype(Child, Parent);
+			console.log("MM.oop.inheritPrototype(Child, Parent): ", new Child());
 			
 		</script>
 	</body>

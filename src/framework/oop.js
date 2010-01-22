@@ -1,73 +1,97 @@
 /**
  * Object Oriented Utils
  * @author Miller Medeiros <www.millermedeiros.com>
- * @version 0.2.2 (2010/01/10)
+ * @version 0.3 (2010/01/21)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 (function(){
 	
-	//TODO: Refactor all methods. Find better names for `inherit` and `aggregate` also remove `abstractBind`.
-	
-	//instantiate main objects if it doesn't exist
+	//instantiate main objects if they don't exist
 	this.MM = this.MM || {};
 	MM.oop = MM.oop || {};
 	
 	/**
-	 * Copy properties from one Object to another
-	 * @param {Object} obj Object to be extended.
-	 * @param {Object} xo Extension Object.
-	 * @return {Object} Extended Object.
+	 * Create a new Object by combining properties from all the objects.
+	 * @param {rest} objs	Objects to be combined (0...n objects).
+	 * @return {Object} Combined Object.
 	 */
-	MM.oop.aggregate = function(obj, xo){
-		for (var k in (xo || {})) obj[k] = xo[k];
-		return obj;
+	MM.oop.mixIn = function(objs){
+		var o = {};
+		for(var i=0, n=arguments.length; i<n; i++){
+			for(var key in arguments[i]){
+				o[key] = arguments[i][key];
+			}
+		}
+		return o;
 	};
 	
 	/**
-	 * Inherit prototype from another Object
-	 * @param {Object} sub SubType
-	 * @param {Object} sup SuperType
+	 * Inherit prototype from another Object.
+	 * - inspired by Nicholas Zackas <http://nczonline.net> Solution
+	 * @param {Object} child	Child object
+	 * @param {Object} parent	Parent Object
 	 */
-	MM.oop.inherit = function(sub, sup){
-		var p = object(sup.prototype);
-		p.constructor = sub;
-		sub.prototype = p;
+	MM.oop.inheritPrototype = function(child, parent){
+		var p = MM.oop.createObject(parent.prototype);
+		p.constructor = child;
+		child.prototype = p;
 	}
 	
 	/**
-	 * Shortcut for Bind
-	 * @param {Function} fn Function.
-	 * @param {Object} context Execution context.
-	 * @param {Array} argsArr Array with arguments.
-	 * @private
+	 * Create Object using prototypal inheritance and setting custom properties.
+	 * - Mix between Douglas Crockford Prototypal Inheritance <http://javascript.crockford.com/prototypal.html> and the EcmaScript 5 `Object.create()` method.
+	 * @param {Object} parent	Parent Object.
+	 * @param {Object} props	Object properties.
+	 * @return {Object} cloned Object.
 	 */
-	function abstractBind(fn, context, argsArr){
+	MM.oop.createObject = function(parent, props){
+		function F(){}
+		F.prototype = parent;
+		var o = new F();
+		o = MM.oop.mixIn(o, props);
+		return o;
+	};
+	
+	/**
+	 * Return a function that will execute in the given context, optionally adding any additional supplied parameters to the beginning of the arguments collection.
+	 * @param {Function} fn	Function.
+	 * @param {Object} context	Execution context.
+	 * @param {rest} args	Arguments (0...n arguments).
+	 * @return {Function} Wrapped Function.
+	 */
+	MM.oop.bind = function(fn, context, args){
+		var argsArr = Array.prototype.slice.call(arguments, 2); //curried args
 		return function(){
 			return fn.apply(context, argsArr.concat(Array.prototype.slice.call(arguments)));
 		};
 	};
 	
 	/**
-	 * Call a function in the given context
-	 * @param {Function} fn Function.
-	 * @param {Object} context Execution context.
-	 * @param {Object} [args] Arguments (0...n arguments).
+	 * Return a function that will execute in the given context, optionally adding any additional supplied parameters to the end of the arguments collection.
+	 * @param {Function} fn	Function.
+	 * @param {Object} context	Execution context.
+	 * @param {rest} args	Arguments (0...n arguments).
 	 * @return {Function} Wrapped Function.
 	 */
-	MM.oop.bind = function(fn, context, args){
-		var args = Array.prototype.slice.call(arguments, 2);
-		return abstractBind(fn, context, args);
+	MM.oop.rbind = function(fn, context, args){
+		var argsArr = Array.prototype.slice.call(arguments, 2); //curried args
+		return function(){
+			var innerArgs = Array.prototype.slice.call(arguments);
+			return fn.apply(context, innerArgs.concat(argsArr));
+		};
 	};
 	
 	/**
-	 * Create a Function with default parameters
-	 * @param {Object} fn Base function.
-	 * @param {Object} args Default arguments (1...n arguments).
+	 * Return a Function with default parameters.
+	 * @param {Object} fn	Base function.
+	 * @param {rest} args	Default arguments (1...n arguments).
 	 * @return {Function} Curried Function.
 	 */
 	MM.oop.curry = function(fn, args){
-		var args = Array.prototype.slice.call(arguments, 1);
-		return abstractBind(fn, null, args);
+		var argsArr = Array.prototype.slice.call(arguments, 1); //curried args
+		return function(){
+			return fn.apply(fn, argsArr.concat(Array.prototype.slice.call(arguments)));
+		};
 	};
 	
 })();
