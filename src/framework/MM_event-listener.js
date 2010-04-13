@@ -10,7 +10,7 @@
 	this.MM = this.MM || {};
 	MM.event = MM.event || {};
 	
-	var mmevent = MM.event; //local storage for performance improvement
+	var mmevt = MM.event; //local storage for performance improvement
 	
 	/**
 	* Adds Event Listener
@@ -18,7 +18,7 @@
 	* @param {String} e Event type.
 	* @param {Function} fn Listener function.
 	*/
-	mmevent.addListener = function(elm, e, fn){
+	mmevt.addListener = function(elm, e, fn){
 		if(elm.addEventListener){
 			elm.addEventListener(e, fn, false);
 		}else if(elm.attachEvent){
@@ -34,7 +34,7 @@
 	* @param {String} e Event type.
 	* @param {Function} fn Listener function.
 	*/
-	mmevent.removeListener = function(elm, e, fn){
+	mmevt.removeListener = function(elm, e, fn){
 		if (elm.removeEventListener) {
 			elm.removeEventListener(e, fn, false);
 		}else if(elm.detachEvent){
