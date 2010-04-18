@@ -2,7 +2,7 @@
  * MM.EventDispatcher
  * - Class used to allow Custom Objects to dispatch events.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.1 (2010/04/10)
+ * @version 0.2 (2010/04/16)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 (function(){
@@ -10,43 +10,43 @@
 	this.MM = this.MM || {};
 	
 	/**
-	 * Constructor - creates a new EventDispatcher Object
+	 * Constructor 
+	 * - Creates a new EventDispatcher Object
 	 */
-	MM.EventDispatcher = MM.EventDispatcher || function(){
+	MM.EventDispatcher = function(){
 		this._handlers = {};
 	};
 	
-	var UNDEF = "undefined",
-		prot = MM.EventDispatcher.prototype, //local storage for performance
-		doc = document;
+	var UNDEF = 'undefined',
+		prot = MM.EventDispatcher.prototype; //local storage for performance
 	
 	/**
 	 * Add Event Listener
-	 * @param {String} e	Event Type.
+	 * @param {String} eType	Event Type.
 	 * @param {Function} fn	Event Handler.
 	 */
-	prot.addListener = function(e, fn){
-		if(typeof this._handlers[e] == UNDEF){
-			this._handlers[e] = [];
+	prot.addListener = function(eType, fn){
+		if(typeof this._handlers[eType] == UNDEF){
+			this._handlers[eType] = [];
 		}
-		this._handlers[e].push(fn);
+		this._handlers[eType].push(fn);
 	};
 	
 	/**
 	 * Remove Event Listener
-	 * @param {String} e	Event Type.
+	 * @param {String} eType	Event Type.
 	 * @param {Function} fn	Event Handler.
 	 */
-	prot.removeListener = function(e, fn){
-		if(! this._handlers[e]){
+	prot.removeListener = function(eType, fn){
+		if(! this.hasListener(eType)){
 			return;
 		}
 		
-		var	typeHandlers = this._handlers[e], //stored for performance
+		var	typeHandlers = this._handlers[eType], //stored for performance
 			n = typeHandlers.length;
 			
 		if(n == 1){
-			this._handlers[e] = null; //avoid loop if not necessary
+			this._handlers[eType] = null; //avoid loop if not necessary
 		}else{
 			while(n--){ //faster than for
 				if(typeHandlers[n] == fn){
@@ -66,28 +66,26 @@
 	
 	/**
 	 * Checks if the EventDispatcher has any listeners registered for a specific type of event. 
-	 * @param {String} e	Event Type.
+	 * @param {String} eType	Event Type.
 	 * @return {Boolean}
 	 */
-	prot.hasListener = function(e){
-		return (typeof this._handlers[e] != UNDEF);
+	prot.hasListener = function(eType){
+		return (typeof this._handlers[eType] != UNDEF);
 	};
 	
 	/**
-	 * Dispatch Event - Call all Event Handlers.
-	 * @param {String} e	Event Type.
-	 * @param {Object} [context]	Context on which handlers should be called, default value is `this`.
+	 * Dispatch Event
+	 * - Call all Handlers Listening to the Event.
+	 * @param {Event|String} e	Custom Event Object (property `type` is required) or String with Event type.
 	 */
-	prot.dispatch = function(e, context){
-		if(typeof this._handlers[e] != UNDEF){
-			var typeHandlers = this._handlers[e], //stored for performance
-				n = typeHandlers.length,
-				context = context || this,
+	prot.dispatch = function(e){
+		e = (typeof e == 'string')? {type: e} : e;
+		if(this.hasListener(e.type)){
+			var typeHandlers = this._handlers[e.type], //stored for performance
 				curHandler;
-			
-			for(var i=0; i<n; i++){
+			for(var i=0, n = typeHandlers.length; i<n; i++){
 				curHandler = typeHandlers[i];
-				curHandler.call(context);
+				curHandler(e);
 			}	
 		}
 	};
