@@ -7,18 +7,36 @@
 		<script src="../src/framework/MM_loader.js" type="text/javascript"></script>
 	</head>
 	<body>
-		<div id="holder">&nbsp;</div>
+		<div id="holder"></div>		
+		
 		<script type="text/javascript">
-			MM.loader.loadScript('http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', loadScript2);
+			var holder = document.getElementById('holder');
+			var forceReload = Math.round( Math.random() * 0xffffff );
 			
-			function loadScript2(){
-				MM.loader.loadScript('http://swffit.millermedeiros.com/swffit.js', 
-					function(){
-						swffit.showScrollH(); //used to check if script is ready
-						MM.loader.loadStyleSheet('http://swffit.millermedeiros.com/css/style.css');
-					}
-				);
+			MM.loader.loadScript('http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', complete1);
+			
+			function complete1(){
+				holder.innerHTML += 'script #1 loaded <br />';
+				MM.loader.loadScript('http://swffit.millermedeiros.com/swffit.js', complete2);
 			}
+			
+			function complete2(){
+				swffit.showScrollH(); //used to check if script is ready
+				holder.innerHTML += 'script #2 loaded <br />';
+				MM.loader.loadStyleSheet('http://swffit.millermedeiros.com/css/style.css'); //css doesn't have callback
+				holder.innerHTML += 'loading stylesheet <br />';
+				
+				MM.loader.preloadImage('http://www.millermedeiros.com/works/mixed-media/onlyrock.jpg?forceReload='+ forceReload, onImageComplete);
+				MM.loader.preloadImage('http://www.millermedeiros.com/works/wallpaper-space-03/wallpaper-space_1440_900.jpg?forceReload='+ forceReload, onImageComplete);
+				MM.loader.preloadImage('http://www.millermedeiros.com/works/mixed-media/kombao_01.jpg?forceReload='+ forceReload, onImageComplete);
+				MM.loader.preloadImage('http://www.millermedeiros.com/works/t-shirts/siamese-cat_v2.png?forceReload='+ forceReload, onImageComplete);
+			}
+			
+			function onImageComplete(img){
+				holder.innerHTML += 'image loaded: '+ img.src +'<br />';
+				document.body.appendChild(img);
+			}
+			
 		</script>
 	</body>
 </html>
