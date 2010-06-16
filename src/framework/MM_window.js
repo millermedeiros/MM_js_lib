@@ -2,71 +2,72 @@
  * MM.window 
  * - utilities for dealing with the browser window
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.2 (2010/01/26)
+ * @version 0.3 (2010/06/15)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-(function(){
+(function(window, document, undefined){
 	
+	/**
+	 * @namespace
+	 * @ignore
+	 */
 	this.MM = this.MM || {};
-	MM.window = MM.window || {};
-	
-	//local storage for performance improvement
-	var doc = document,
-		win = window,
-		mmwin = MM.window;
 	
 	/**
-	 * Get window innerWidth
-	 * @return {int} innerWidth
-	 * @static
+	 * @namespace
 	 */
-	mmwin.getInnerWidth = function(){
-		return (win.innerWidth)? win.innerWidth : ((doc.documentElement.clientWidth)? doc.documentElement.clientWidth : doc.body.clientWidth);
+	MM.window = {
+	
+		/**
+		 * Get window innerWidth
+		 * @return {int} innerWidth
+		 */
+		getInnerWidth : function(){
+			return (window.innerWidth)? window.innerWidth : ((document.documentElement.clientWidth)? document.documentElement.clientWidth : document.body.clientWidth);
+		},
+	
+		/**
+		 * Get window innerHeight
+		 * @return {int} innerHeight
+		 */
+		getInnerHeight : function(){
+			return (window.innerHeight)? window.innerHeight : ((document.documentElement.clientHeight)? document.documentElement.clientHeight : document.body.clientHeight);
+		},
+	
+		/**
+		 * Get window scrollTop
+		 * @return {int} scrollTop
+		 */
+		getScrollTop : function(){
+			return document.body.scrollTop ? document.body.scrollTop : (window.pageYOffset ? window.pageYOffset : (document.body.parentElement ? document.body.parentElement.scrollTop : 0));
+		},
+	
+		/**
+		 * Get window scrollLeft
+		 * @return {int} scrollLeft
+		 */
+		getScrollLeft : function(){
+			return document.body.scrollLeft ? document.body.scrollLeft : (window.pageXOffset ? window.pageXOffset : (document.body.parentElement ? document.body.parentElement.scrollLeft : 0));
+		},
+	
+		/**
+		 * Get total width of the document
+		 * @return {int} document width
+		 * @static
+		 */
+		getDocumentWidth : function(){
+			return Math.max(document.documentElement.scrollWidth, this.getInnerWidth());
+		},
+		
+		/**
+		 * Get total height of the document
+		 * @return {int} document height
+		 * @static
+		 */
+		getDocumentHeight : function(){
+			return Math.max(document.documentElement.scrollHeight, this.getInnerHeight());
+		}
+		
 	};
 	
-	/**
-	 * Get window innerHeight
-	 * @return {int} innerHeight
-	 * @static
-	 */
-	mmwin.getInnerHeight = function(){
-		return (win.innerHeight)? win.innerHeight : ((doc.documentElement.clientHeight)? doc.documentElement.clientHeight : doc.body.clientHeight);
-	};
-	
-	/**
-	 * Get window scrollTop
-	 * @return {int} scrollTop
-	 * @static
-	 */
-	mmwin.getScrollTop = function(){
-		return doc.body.scrollTop ? doc.body.scrollTop : (win.pageYOffset ? win.pageYOffset : (doc.body.parentElement ? doc.body.parentElement.scrollTop : 0));
-	};
-	
-	/**
-	 * Get window scrollLeft
-	 * @return {int} scrollLeft
-	 * @static
-	 */
-	mmwin.getScrollLeft = function(){
-		return doc.body.scrollLeft ? doc.body.scrollLeft : (win.pageXOffset ? win.pageXOffset : (doc.body.parentElement ? doc.body.parentElement.scrollLeft : 0));
-	};
-	
-	/**
-	 * Get total width of the document
-	 * @return {int} document width
-	 * @static
-	 */
-	mmwin.getDocumentWidth = function(){
-		return Math.max(doc.documentElement.scrollWidth, mmwin.getInnerWidth());
-	};
-	
-	/**
-	 * Get total height of the document
-	 * @return {int} document height
-	 * @static
-	 */
-	mmwin.getDocumentHeight = function(){
-		return Math.max(doc.documentElement.scrollHeight, mmwin.getInnerHeight());
-	};
-	
-})();
+})(window, document);

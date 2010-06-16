@@ -2,7 +2,7 @@
  * MM.EventDispatcher
  * - Class used to allow Custom Objects to dispatch events.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.5 (2010/05/01)
+ * @version 0.7 (2010/05/10)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 
@@ -46,7 +46,7 @@ MM.EventDispatcher.prototype = {
 		var	typeHandlers = this._handlers[eType], //stored for performance
 			n = typeHandlers.length;
 		if(n == 1){
-			this._handlers[eType] = null; //avoid loop if not necessary
+			delete this._handlers[eType];
 		}else{
 			while(n--){ //faster than for
 				if(typeHandlers[n] == fn){
@@ -85,6 +85,7 @@ MM.EventDispatcher.prototype = {
 				curHandler,
 				i,
 				n = typeHandlers.length;
+			e.target = e.target || this; //ensure Event.target exists (default to Object that extends EventDispatcher)
 			for(i=0; i<n; i++){
 				curHandler = typeHandlers[i];
 				curHandler(e);
