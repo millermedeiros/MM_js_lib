@@ -2,7 +2,7 @@
  * MM.queryUtils
  * - utilities for query string manipulation
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.3 (2010/05/01)
+ * @version 0.6 (2010/06/21)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 
@@ -10,7 +10,7 @@
  * @namespace
  * @ignore
  */
-this.MM = this.MM || {};
+var MM = MM || {};
 
 /**
  * Utilities for query string manipulation.
@@ -20,18 +20,33 @@ MM.queryUtils = {
 	
 	/**
 	 * Gets full query as string with all special chars decoded.
-	 * @return {String}	Query string without starting '?'.
+	 * @param {String} [url]	 URL to be parsed, defaults to `location.href`
+	 * @return {String}	Query string
 	 */
-	getQueryString : function(){
-		return decodeURIComponent(location.search.substring(1));
+	getQueryString : function(url){
+		url = url || location.href; //used location.href to avoid bug on IE6 and pseudo query string inside location.hash
+		url = url.replace(/#.*/, ''); //removes hash (to avoid getting hash query)
+		var queryString = /\?[a-zA-Z0-9\=\&\%\$\-\_\.\+\!\*\'\(\)\,]+/.exec(url); //valid chars according to: http://www.ietf.org/rfc/rfc1738.txt
+		return (queryString)? decodeURIComponent(queryString[0]) : '';
 	},
 	
 	/**
 	 * Gets query as Object.
+	 * - Alias for `MM.queryUtils.toQueryObject( MM.queryUtils.getQueryString(url) )`
+	 * @param {String} [url]	URL to be parsed, default to location.href.
 	 * @return {Object}	Object with all the query "params => values" pairs.
 	 */
-	getQueryObject : function(){
-		var queryArr = this.getQueryString().split('&'), 
+	getQueryObject : function(url){
+		return this.toQueryObject(this.getQueryString(url));
+	},
+	
+	/**
+	 * Convert Query String into an Object
+	 * @param {String} queryString	 Query String to be parsed
+	 * @return {Object}	Object with all the query "params => values" pairs.
+	 */
+	toQueryObject : function(queryString){
+		var queryArr = queryString.replace('?', '').split('&'), 
 			n = queryArr.length,
 			queryObj = {};
 		while (n--) {
@@ -44,19 +59,22 @@ MM.queryUtils = {
 	/**
 	 * Get query parameter value.
 	 * @param {String} param	Parameter name.
+	 * @param {String} [url]	URL to be parsed, default to location.href
 	 * @return {String}	Parameter value.
 	 */
-	getParamValue : function(param){
-		return this.getQueryObject()[param];
+	getParamValue : function(param, url){
+		return this.getQueryObject(url)[param];
 	},
 	
 	/**
 	 * Checks if query contains parameter.
 	 * @param {String} param	Parameter name.
+	 * @param {String} [url]	URL to be parsed, default to location.href
 	 * @return {Boolean} If parameter exist.
 	 */
-	hasParam : function(param){
-		return (this.getQueryString().indexOf(param+'=') >= 0);
+	hasParam : function(param, url){
+		var regexp = new RegExp('(\?|\&)'+ param +'\=', 'g'); //matches `?param=` or `&param=`
+		return regexp.test(this.getQueryString(url));
 	},
 	
 	/**
