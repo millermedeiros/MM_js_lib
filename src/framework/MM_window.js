@@ -5,16 +5,16 @@
  * @version 0.3 (2010/06/15)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-(function(window, document, undefined){
+
+/**
+ * @namespace Miller Medeiros Namespace
+ */
+var MM = MM || {};
+
+(function(window, document, undef){
 	
 	/**
-	 * @namespace
-	 * @ignore
-	 */
-	this.MM = this.MM || {};
-	
-	/**
-	 * @namespace
+	 * @namespace Utilities for dealing with the browser window
 	 */
 	MM.window = {
 	
@@ -53,7 +53,6 @@
 		/**
 		 * Get total width of the document
 		 * @return {int} document width
-		 * @static
 		 */
 		getDocumentWidth : function(){
 			return Math.max(document.documentElement.scrollWidth, this.getInnerWidth());
@@ -62,7 +61,6 @@
 		/**
 		 * Get total height of the document
 		 * @return {int} document height
-		 * @static
 		 */
 		getDocumentHeight : function(){
 			return Math.max(document.documentElement.scrollHeight, this.getInnerHeight());
