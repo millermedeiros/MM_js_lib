@@ -1,5 +1,5 @@
 /**
- * MM.event - DOM Ready
+ * millermedeiros.event - DOM Ready
  * - Add DOM Ready Event Listener.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
  * @version 0.2.1 (2010/02/01)
@@ -7,8 +7,7 @@
  */
 (function(){
 	
-	this.MM = this.MM || {};
-	MM.event = MM.event || {};
+	millermedeiros.event = millermedeiros.event || {};
 	
 	var _isDOMReady = false, //if DOM finished loading/parsing.
 		_isReadyBound = false, //if ready events are attached.
@@ -18,7 +17,7 @@
 	 * Adds an Event Listener that should be triggered after the DOM has finished loading.
 	 * @param {Function} fn	Function that should be called after the DOM is ready.
 	 */
-	MM.event.addDOMReady = function(fn){
+	millermedeiros.event.addDOMReady = function(fn){
 		if(!_isDOMReady){
 			_bindReady();
 			_onReadyFns[_onReadyFns.length] = fn; //faster than push()

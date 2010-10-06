@@ -2,6 +2,8 @@
 
 My Modular JavaScript Library
 
+**IMPORTANT: This Library is on an EARLY ALPHA state and no proper testing was done and API will probably change frequently.**
+
 
 ## Overview ##
 
@@ -34,7 +36,7 @@ It was also created because I don't agree with some frameworks APIs and the codi
  - All code here is released under the [MIT License](http://www.opensource.org/licenses/mit-license.php) unless otherwise noted.
  - I don't give any kind of support on how to use these files.
  - Almost everything is a work in progress.
- - This library is only intended to work on well-formed HTML files, so always use the proper doctype (strict or transitional) and validate your HTML/XHTML.
+ - This library is only intended to work on well-formed HTML files, it won't be tested on [quirks mode](http://www.quirksmode.org/css/quirksmode.html).
  - Some functionalities may not work properly on specific mobile devices.
  - I will probably only test the code on the latest non-beta version of Firefox, Safari, Chrome, Opera and also IE6+.
  - Probably It will never have most of the features that exist on the major frameworks.
@@ -42,7 +44,7 @@ It was also created because I don't agree with some frameworks APIs and the codi
 
 ## Should I use it? ##
 
-This library was designed for *intermediate* to *advanced* JavaScript developers, if you're starting with JavaScript development I recommend using a framework that you can easily find tutorials on the internet, such as [jQuery](http://jquery.com), [MooTools](http://mootools.net) and [prototype](http://www.prototypejs.org/).
+This library was designed for *intermediate* to *advanced* JavaScript developers, if you're starting with JavaScript development I recommend using a framework that you can easily find tutorials on the internet, such as [jQuery](http://jquery.com), [MooTools](http://mootools.net), [dojo toolkit](http://www.dojotoolkit.org/) and [prototype](http://www.prototypejs.org/).
 
 If you're building desktop-like applications it's better to use a JavaScript Framework that already has UI widgets. Check the [comparison list of JavaScript frameworks on Wikipedia](http://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks) to know the differences between each one.
 
@@ -81,7 +83,6 @@ It was heavily inspired by other frameworks and other people work/articles/ideas
  - [John Resig](http://ejohn.org/) and [jQuery](http://jquery.com/)
  - [MooTools](http://mootools.net/)
  - [YUI3](http://developer.yahoo.com/yui/3/)
- - [Thomas Fuchs](http://mir.aculo.us/)
 
 
 ----

@@ -1,56 +1,54 @@
 /**
- * Object Oriented Utils
+ * @namespace Object Orienteded Utilities. Easier inheritance and scope handling.
  * @author Miller Medeiros <www.millermedeiros.com>
- * @version 0.3 (2010/01/21)
+ * @version 0.4 (2010/09/10)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-(function(){
-	
-	//instantiate main objects if they don't exist
-	this.MM = this.MM || {};
-	MM.oop = MM.oop || {};
-	
-	/**
+millermedeiros.oop = {
+ 	
+ 	/**
 	 * Create a new Object by combining properties from all the objects.
-	 * @param {rest} objs	Objects to be combined (0...n objects).
-	 * @return {Object} Combined Object.
+	 * @param {...object} objects	Objects to be combined (0...n objects).
+	 * @return {object} Combined Object.
 	 */
-	MM.oop.mixIn = function(objs){
-		var o = {};
-		for(var i=0, n=arguments.length; i<n; i++){
+ 	mixIn : function(objects){
+		var o = {},
+			i = 0, 
+			n = arguments.length;
+		for(; i<n; i++){
 			for(var key in arguments[i]){
 				o[key] = arguments[i][key];
 			}
 		}
 		return o;
-	};
+	},
 	
 	/**
 	 * Inherit prototype from another Object.
 	 * - inspired by Nicholas Zackas <http://nczonline.net> Solution
-	 * @param {Object} child	Child object
-	 * @param {Object} parent	Parent Object
+	 * @param {object} child	Child object
+	 * @param {object} parent	Parent Object
 	 */
-	MM.oop.inheritPrototype = function(child, parent){
-		var p = MM.oop.createObject(parent.prototype);
+	inheritPrototype : function(child, parent){
+		var p = this.createObject(parent.prototype);
 		p.constructor = child;
 		child.prototype = p;
-	}
+	},
 	
 	/**
 	 * Create Object using prototypal inheritance and setting custom properties.
 	 * - Mix between Douglas Crockford Prototypal Inheritance <http://javascript.crockford.com/prototypal.html> and the EcmaScript 5 `Object.create()` method.
-	 * @param {Object} parent	Parent Object.
-	 * @param {Object} props	Object properties.
-	 * @return {Object} cloned Object.
+	 * @param {object} parent	Parent Object.
+	 * @param {object} props	Object properties.
+	 * @return {object} cloned Object.
 	 */
-	MM.oop.createObject = function(parent, props){
+	createObject : function(parent, props){
 		function F(){}
 		F.prototype = parent;
 		var o = new F();
-		o = MM.oop.mixIn(o, props);
+		o = this.mixIn(o, props);
 		return o;
-	};
+	},
 	
 	/**
 	 * Return a function that will execute in the given context, optionally adding any additional supplied parameters to the beginning of the arguments collection.
@@ -59,39 +57,39 @@
 	 * @param {rest} args	Arguments (0...n arguments).
 	 * @return {Function} Wrapped Function.
 	 */
-	MM.oop.bind = function(fn, context, args){
+	bind : function(fn, context, args){
 		var argsArr = Array.prototype.slice.call(arguments, 2); //curried args
 		return function(){
 			return fn.apply(context, argsArr.concat(Array.prototype.slice.call(arguments)));
 		};
-	};
+	},
 	
 	/**
 	 * Return a function that will execute in the given context, optionally adding any additional supplied parameters to the end of the arguments collection.
 	 * @param {Function} fn	Function.
 	 * @param {Object} context	Execution context.
-	 * @param {rest} args	Arguments (0...n arguments).
+	 * @param {...*} args	Arguments (0...n arguments).
 	 * @return {Function} Wrapped Function.
 	 */
-	MM.oop.rbind = function(fn, context, args){
+	rbind : function(fn, context, args){
 		var argsArr = Array.prototype.slice.call(arguments, 2); //curried args
 		return function(){
 			var innerArgs = Array.prototype.slice.call(arguments);
 			return fn.apply(context, innerArgs.concat(argsArr));
 		};
-	};
+	},
 	
 	/**
 	 * Return a Function with default parameters.
-	 * @param {Object} fn	Base function.
-	 * @param {rest} args	Default arguments (1...n arguments).
+	 * @param {object} fn	Base function.
+	 * @param {...*} args	Default arguments (1...n arguments).
 	 * @return {Function} Curried Function.
 	 */
-	MM.oop.curry = function(fn, args){
+	curry : function(fn, args){
 		var argsArr = Array.prototype.slice.call(arguments, 1); //curried args
 		return function(){
 			return fn.apply(fn, argsArr.concat(Array.prototype.slice.call(arguments)));
 		};
-	};
+	}
 	
-})();
+};
