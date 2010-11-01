@@ -2,7 +2,7 @@
 
 My Modular JavaScript Library
 
-**IMPORTANT: This Library is on an EARLY ALPHA state and no proper testing was done and API will probably change frequently.**
+**IMPORTANT: This Library is on an EARLY ALPHA state, the API is constantly changing.**
 
 
 ## Overview ##
