@@ -1,13 +1,14 @@
 /**
- * @namespace Basic code minifier
+ * @namespace Extremally basic code minifier
  * @author Miller Medeiros
- * @version 0.1 (2010/09/17)
+ * @version 0.0.1 (2010/09/17)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 millermedeiros.minifier = {
 	
 	/**
-	 * Compress HTML file - Strip comments, remove tabs and line breaks.
+	 * Compress HTML file (Strip comments, remove tabs and line breaks).
+	 * - <strong>IMPORTANT:</strong> comments inside 'script' and 'style' tags may produce undesired output.
 	 * @param {string} str
 	 * @param {boolean} [preserveComents]
 	 * @param {boolean} [preserveLineBreaks]
