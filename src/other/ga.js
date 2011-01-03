@@ -19,7 +19,6 @@ milllermedeiros.ga = {
 		url += '&utmr='+ (document.referer || '-');
 		url += '&utmdt='+ (encodeURIComponent(document.title) || '-');
 		url += '&utmp='+ escape(pageId);
-		url += '&guid=ON';
 		return url;
 	},
 	
