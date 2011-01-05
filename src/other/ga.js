@@ -23,7 +23,7 @@ millermedeiros.ga = {
 	 * @param {string} accountId	Google Analytics account ID.
 	 * @param {string} pageId	URL or string that identify page/event.
 	 */
-	getPixelUrl : function getPixelUrl(accountId, pageId){
+	getPixelUrl : function(accountId, pageId){
 		pageId = pageId || '';
 		var url = this.GA_PIXEL +'?';
 		url += 'utmac='+ accountId;
