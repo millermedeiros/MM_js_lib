@@ -1,5 +1,5 @@
 /**
- * @namespace Extremally basic version of Google Analytics based on GA mobile (doesn't have all the features of desktop GA)
+ * @namespace Extremely basic version of Google Analytics based on GA mobile (doesn't have all the features of desktop GA)
  * @author Miller Medeiros
  * @version 0.0.3 (2011/01/05)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>

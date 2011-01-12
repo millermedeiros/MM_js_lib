@@ -1,7 +1,7 @@
 /**
  * @namespace Utilities for query string manipulation.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.8.2 (2010/08/12)
+ * @version 0.8.3 (2011/01/12)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 millermedeiros.queryUtils = {
@@ -57,7 +57,7 @@ millermedeiros.queryUtils = {
 		var regexp = new RegExp('(\\?|&)'+ param + '=([^&]*)'), //matches `?param=value` or `&param=value`, value = $2
 			result = regexp.exec(url),
 			value = (result && result[2])? result[2] : null;
-		return isNaN(value)? value : parseFloat(value);
+		return (value === null || isNaN(value))? value : parseFloat(value); //parseFloat(null) returns NaN
 	},
 	
 	/**
