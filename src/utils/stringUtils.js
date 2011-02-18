@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace String Utilities
  * @author Miller Medeiros
  * @version 0.1.4 (2010/12/15)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.stringUtils = {
+var stringUtils = {
 	
 	/**
 	 * Remove white-spaces from beginning and end of string.
@@ -26,15 +28,19 @@ millermedeiros.stringUtils = {
 		separator = separator || ' | ';
 		var n = pathTitles.length,
 			output = [];
-		while(n--) output.push(pathTitles[n]);
-		if(defaultTitle) output.push(defaultTitle);
+		while(n--){
+			output.push(pathTitles[n]);
+		}
+		if(defaultTitle){
+			output.push(defaultTitle);
+		}
 		return this.stripHtmlTags(output.join(separator));
 	},
 	
 	/**
 	 * Replaces spaces with hyphens, split camel case text, remove non-word chars, remove accents and convert to lower case.
 	 * - ported from Miller Medeiros Eclipse Monkey Scripts
-	 * @example millermedeiros.stringUtils.hyphenate('lorem ipsum spÃ«Ã§Ã­Ã£lChÃ¢rs') -> 'lorem-ipsum-special-chars'
+	 * @example millermedeiros.stringUtils.hyphenate('lorem ipsum spéçïãl­Chârs') -> 'lorem-ipsum-special-chars'
 	 * @param {string} str
 	 * @return {string}
 	 */
@@ -98,6 +104,9 @@ millermedeiros.stringUtils = {
 	 */
 	stripHtmlTags : function(str){
 		return str.replace(/<[^>]*>/g, '');
-	},
+	}
 	
 };
+
+return stringUtils;
+});

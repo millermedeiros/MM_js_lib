@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace String Utilities for HTML manipulation
  * @author Miller Medeiros
  * @version 0.0.1 (2010/12/15)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.htmlUtils = {
+var htmlUtils = {
 	
 	/**
 	 * Convert line breaks into 'br' tags (same as PHP nl2br)
@@ -330,3 +332,8 @@ millermedeiros.htmlUtils = {
 	}
 	
 };
+
+
+return htmlUtils;
+
+});

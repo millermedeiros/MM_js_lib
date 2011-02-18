@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace Math utilities
  * @author Miller Medeiros
  * @version 0.0.3 (2011/01/14)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.mathUtils = {
+var mathUtils = {
 	
 	/**
 	 * Clamp value inside range
@@ -39,3 +41,6 @@ millermedeiros.mathUtils = {
 	}
 	
 };
+
+return mathUtils;
+});

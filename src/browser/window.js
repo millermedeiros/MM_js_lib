@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace Utilities for dealing with the browser window
  * @author Miller Medeiros <http://www.millermedeiros.com/>
  * @version 0.3 (2010/06/15)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.window = {
+var win = {
 
 	/**
 	 * Get window innerWidth
@@ -55,3 +57,6 @@ millermedeiros.window = {
 	}
 	
 };
+
+return win;
+});

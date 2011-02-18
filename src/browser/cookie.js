@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace Utilities for cookie manipulation
  * @author Miller Medeiros <http://www.millermedeiros.com/>
  * @version 0.1 (2010/01/10)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.cookie = {
+var cookie = { //who told you can eat my cookies! put that cookie down now!]
 	
 	/**
 	 * Sets a Cookie
@@ -70,3 +72,6 @@ millermedeiros.cookie = {
 	}
 	
 };
+
+return cookie;
+});

@@ -7,11 +7,9 @@ My Modular JavaScript Library
 
 ## Overview ##
 
-This is a collection of JavaScript *classes*/*helpers*/*methods* created for personal use and also for learning purposes.
+This is a collection of JavaScript *classes/helpers/methods/modules* created for personal use and also for learning purposes.
 
 It was created to be used when only some specific features are required avoiding the use of a full bloated framework when it isn't really necessary.
-
-It was also created because I don't agree with some frameworks APIs and the coding style that they "enforce".
 
 
 ## Main goals: ##
@@ -26,7 +24,6 @@ It was also created because I don't agree with some frameworks APIs and the codi
  - be compatible with other frameworks;
  - be simple;
  - be small;
- - be fully documented;
 
 
 ## Important ##
@@ -40,52 +37,23 @@ It was also created because I don't agree with some frameworks APIs and the codi
  - Some functionalities may not work properly on specific mobile devices.
  - I will probably only test the code on the latest non-beta version of Firefox, Safari, Chrome, Opera and also IE6+.
  - Probably It will never have most of the features that exist on the major frameworks.
- 
+ - Some code may not work as is since I'm constantly making changes on the structure without testing it.
+ - Some modules may never be used for production and not even tested.
+ - Some modules may only work for a specific browser/environment.
+
 
 ## Should I use it? ##
 
-This library was designed for *intermediate* to *advanced* JavaScript developers, if you're starting with JavaScript development I recommend using a framework that you can easily find tutorials on the internet, such as [jQuery](http://jquery.com), [MooTools](http://mootools.net), [dojo toolkit](http://www.dojotoolkit.org/) and [prototype](http://www.prototypejs.org/).
+This library was designed for *intermediate* to *advanced* JavaScript developers, if you're starting with JavaScript development I recommend using a 
+framework that you can easily find tutorials on the internet and that has a active development community, such as [dojo toolkit](http://www.dojotoolkit.org/), 
+[YUI](http://developer.yahoo.com/yui/), [jQuery](http://jquery.com) and [MooTools](http://mootools.net).
 
-If you're building desktop-like applications it's better to use a JavaScript Framework that already has UI widgets. Check the [comparison list of JavaScript frameworks on Wikipedia](http://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks) to know the differences between each one.
+Use it if you are feeling adventurous and know how to fix bugs. Until now it doesn't have any unit tests and code structure is being changed without 
+running it on the browser or any other environment even once. I'm improving it based on my needs and fixing bugs when I need that feature. 
 
-This library was created mainly to be used on small to medium web sites.
-
-
-## Coding Conventions ##
-
-### Code structure ###
- - don't over-complicate the structure unless the gain in performance/maintainability/reliability justifies it (if you do it, add a comment explaining what it does and why).
- - encapsulate your code, never pollute the global scope unless it's really necessary (use closures, namespaces...).
- - never extend or overwrite native Objects prototypes.
-
-### Documentation ###
- - always document the source code using a JavaDoc like style, see [jsdoc-toolkit wiki](http://code.google.com/p/jsdoc-toolkit/wiki/TagReference) for further details.
- - always add comments to parts of the code that may be unclear to other developers and/or that solves specific bugs.
- - always add the proper credits if the specific method was based/inspired/ported/copied/etc by someone's code/idea/article even if you implemented it in a different way. (it can be used as a reference in the future and also to detect and report possible bugs)
- - always prefer readable/meaningful code over small code; compressors can do a good job reducing the file size so there's no real reason to make the code unreadable and hard to maintain & debug.
- - always add notes inside the source code about improvement ideas, what still needs to be done and fixed using the Eclipse task tags: "XXX", "TODO" and "FIXME".
-
-### Naming conventions ###
- - write clear methods/variables names and if possible follow W3C standards or common naming conventions.
- - always start `private` methods and vars names with an underscore "_" even if it isn't a "real" private member to make it clear that this var/method shouldn't be accessed from outside.
- - `Class` names should always start with a capital letter.
- - `constant` names should always be written in "ALL_CAPS" and words should be separated by a "_" (underscore).
- - `var` and `method` names should always be in "camelCase".
-
-
-## Inspiration ##
- 
-It was heavily inspired by other frameworks and other people work/articles/ideas and they're are properly credited on the source code. Just to cite a few of them:
-
- - [Nicholas C. Zackas](http://nczonline.net/)
- - [Peter-Paul Koch](http://www.quirksmode.org/)
- - [Dean Edwards](http://dean.edwards.name/)
- - [John Resig](http://ejohn.org/) and [jQuery](http://jquery.com/)
- - [MooTools](http://mootools.net/)
- - [YUI3](http://developer.yahoo.com/yui/3/)
+This library was created mainly to be used on small to medium web sites and to be a starting point and/or reference to other implementations.
 
 
 ----
-
 
 &copy; [Miller Medeiros](http://www.millermedeiros.com)

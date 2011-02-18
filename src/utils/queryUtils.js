@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace Utilities for query string manipulation.
  * @author Miller Medeiros <http://www.millermedeiros.com/>
  * @version 0.8.3 (2011/01/12)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.queryUtils = {
+var queryUtils = {
 	
 	/**
 	 * Gets full query as string with all special chars decoded.
@@ -88,3 +90,6 @@ millermedeiros.queryUtils = {
 	}
 	
 };
+
+return queryUtils;
+});
