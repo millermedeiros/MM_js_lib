@@ -36,7 +36,6 @@
 		}
 		_isDOMReady = true;
 		_isReadyBound = null;
-		//TODO: change the way it works to a real event dispatcher instead of a callback system.
 		for(var i=0, n=_onReadyFns.length; i<n; i++){
 			_onReadyFns[i]();
 		}

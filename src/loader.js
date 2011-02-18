@@ -1,23 +1,16 @@
 /**
- * millermedeiros.loader
- * - basic external assets loader
+ * Basic external assets loader
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.3.3 (2010/09/10)
+ * @version 0.3.4 (2011/01/14)
+ * @namespace
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-
-//XXX: check if load failed? (not sure if 'onerror' and readyState works properly, maybe will need to check timeout)
-//TODO: test if loaded script can really be executed during callback.
-//TODO: create a queue system with option to force the load to be synchronous (probably a new Class).
-//XXX: maybe just keep it simple and use RequireJS if need something more robust.
-
-/**
- * Basic external assets loader
- * @namespace
- */
 millermedeiros.loader = (function(){
-	
-	var noop = function(){};
+
+	//XXX: check if load failed? (not sure if 'onerror' and readyState works properly, maybe will need to check timeout)
+	//TODO: test if loaded script can really be executed during callback.
+	//TODO: create a queue system with option to force the load to be synchronous (probably a new Class).
+	//XXX: maybe just keep it simple and use RequireJS if need something more robust.
 	
 	/**
 	 * Attach onload event listeners to elements
@@ -31,13 +24,13 @@ millermedeiros.loader = (function(){
 		if('readyState' in target){ //IE
 			target.onreadystatechange = function(){
 				if (target.readyState === 'loaded' || target.readyState === 'complete'){
-					target.onreadystatechange = noop;
+					target.onreadystatechange = millermedeiros.noop;
 					setTimeout(onLoadCallback, 1); //ensure that script is ready to execute. (not sure if it really works)
 				}
 			};
 		} else { //other browsers
 			target.onload = function(){
-				target.onload = noop;
+				target.onload = millermedeiros.noop;
 				setTimeout(onLoadCallback, 1); //ensure that script is ready to execute. (not sure if it really works)
 			};
 		}
