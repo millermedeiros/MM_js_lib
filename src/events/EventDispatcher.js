@@ -1,3 +1,5 @@
+define(function(){
+
 /**
  * EventDispatcher Object, used to allow Custom Objects to dispatch events.
  * @constructor
@@ -5,7 +7,7 @@
  * @version 0.8.2 (2010/08/26)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.EventDispatcher = function(){
+var EventDispatcher = function(){
 	/** 
 	 * Event Handlers
 	 * @type Object.<string, Array.<Function>>
@@ -19,7 +21,7 @@ millermedeiros.EventDispatcher = function(){
 	this._disabled = [];
 };
 
-millermedeiros.EventDispatcher.prototype = {
+EventDispatcher.prototype = {
 	
 	/**
 	 * Add Event Listener
@@ -124,9 +126,9 @@ millermedeiros.EventDispatcher.prototype = {
 			n = types.length,
 			curType;
 		 while(n--){
-		 	curType = types[n];
+			curType = types[n];
 			if(this.willDispatch(curType)){ //avoid adding multiple times
-		 		this._disabled.push(curType);
+				this._disabled.push(curType);
 			}
 		 }
 	},
@@ -141,8 +143,8 @@ millermedeiros.EventDispatcher.prototype = {
 			m,
 			curType;
 		 while(n--){
-		 	curType = types[n];
-		 	m = this._disabled.length;
+			curType = types[n];
+			m = this._disabled.length;
 			while(m--){
 				if(this._disabled[m] === curType){
 					this._disabled.splice(m, 1);
@@ -152,3 +154,6 @@ millermedeiros.EventDispatcher.prototype = {
 	}
 	
 };
+
+return EventDispatcher;
+});

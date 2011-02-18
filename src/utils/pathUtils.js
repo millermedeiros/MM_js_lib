@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace Utilities for path name handling
  * @author Miller Medeiros
  * @version 0.1 (2010/09/10)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.pathUtils = {
+var pathUtils = {
 	
 	/**
 	 * Get relative path to a parent folder.
@@ -35,3 +37,6 @@ millermedeiros.pathUtils = {
 	}
 	
 };
+
+return pathUtils;
+});

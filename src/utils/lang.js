@@ -1,23 +1,29 @@
+define(function(){
+
 /**
- * @namespace Object Orienteded Utilities. Easier inheritance and scope handling.
+ * @namespace Language Utilities. Easier inheritance and scope handling.
  * @author Miller Medeiros <www.millermedeiros.com>
- * @version 0.4 (2010/09/10)
+ * @version 0.4.1 (2011/02/18)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.oop = {
- 	
- 	/**
+var lang = {
+	
+	/**
 	 * Create a new Object by combining properties from all the objects.
 	 * @param {...object} objects	Objects to be combined (0...n objects).
 	 * @return {object} Combined Object.
 	 */
- 	mixIn : function(objects){
+	mixIn : function(objects){
 		var o = {},
 			i = 0, 
-			n = arguments.length;
+			n = arguments.length,
+			cur;
 		for(; i<n; i++){
-			for(var key in arguments[i]){
-				o[key] = arguments[i][key];
+			cur = arguments[i];
+			for(var key in cur){
+				if(cur.hasOwnProperty(key)){
+					o[key] = cur[key];
+				}
 			}
 		}
 		return o;
@@ -93,3 +99,6 @@ millermedeiros.oop = {
 	}
 	
 };
+
+return lang;
+});

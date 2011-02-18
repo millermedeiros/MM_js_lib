@@ -1,10 +1,12 @@
+define(function(){
+
 /**
  * @namespace Extremally basic code minifier
  * @author Miller Medeiros
- * @version 0.0.1 (2010/09/17)
+ * @version 0.0.2 (2011/02/18)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
-millermedeiros.minifier = {
+var minifier = {
 	
 	/**
 	 * Compress HTML file (Strip comments, remove tabs and line breaks).
@@ -26,6 +28,25 @@ millermedeiros.minifier = {
 		}
 		str = (! removeMultipleSpaces)? str : str.replace(/ {2,}/g, ' '); //convert multiple spaces into single spaces
 		return str;
+	},
+	
+	/**
+	 * @param {string} str	CSS string.
+	 * @return {string} CSS string without comments, line breaks and unnecessary spaces
+	 */
+	minifyCSS : function(str){
+		return str
+				.replace(/\/\*[\s\S]+?(?:\*\/)/g, "") //everything between "/* */" (comments)
+				.replace(/\t+/g, "") //tabs
+				.replace(/ {2,}/g, " ") //multiple spaces
+				.replace(/ *([,\{\};\:]) */g, "$1") //spaces around ",;{}:" (should come after multiple spaces regexp)
+				.replace(/^\s*\r?\n/gm, "") //empty lines
+				.replace(/;\}/g, "}") //";" just before "}"
+				.replace(/(\:|\,| |\(|\-)0\./g, "$1.") //remove leading zero on fractional number smaller than 1
+				.replace(/[\n\r]+/gm, ""); //remove line breaks
 	}
 	
 };
+
+return minifier;
+});
