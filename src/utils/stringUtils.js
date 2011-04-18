@@ -3,7 +3,7 @@ define(function(){
 /**
  * @namespace String Utilities
  * @author Miller Medeiros
- * @version 0.1.4 (2010/12/15)
+ * @version 0.1.5 (2011/04/08)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 var stringUtils = {
@@ -15,6 +15,24 @@ var stringUtils = {
 	 */
 	trim : function(str){
 		return str.replace(/^\s+|\s+$/g, '');
+	},
+	
+	/**
+	 * Limit number of chars.
+	 *  - ported from Miller Medeiros PHP lib
+	 */
+	crop : function(str, maxChars, append, stripHtml){
+		maxChars = maxChars || 125;
+		append = append || '...';
+		stripHtml = true;
+		
+		str = stripHtml? this.stripHtmlTags(str) : str;
+		if(str.length <= maxChars){
+			return str;
+		}
+		str = str.substr(0, maxChars);
+		str = str.substr(0, str.lastIndexOf(' ')); //crop at last space
+		return str + append;
 	},
 	
 	/**
@@ -40,7 +58,7 @@ var stringUtils = {
 	/**
 	 * Replaces spaces with hyphens, split camel case text, remove non-word chars, remove accents and convert to lower case.
 	 * - ported from Miller Medeiros Eclipse Monkey Scripts
-	 * @example millermedeiros.stringUtils.hyphenate('lorem ipsum spéçïãl­Chârs') -> 'lorem-ipsum-special-chars'
+	 * @example millermedeiros.stringUtils.hyphenate('lorem ipsum spï¿½ï¿½ï¿½ï¿½lï¿½Chï¿½rs') -> 'lorem-ipsum-special-chars'
 	 * @param {string} str
 	 * @return {string}
 	 */
