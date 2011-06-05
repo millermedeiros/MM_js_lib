@@ -1,7 +1,7 @@
 /**
  * Math utilities
  * @author Miller Medeiros
- * @version 0.1.1 (2011/06/05)
+ * @version 0.1.2 (2011/06/05)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 define({
@@ -93,6 +93,13 @@ define({
     */
     toInt : function(val){
         return val ^ 0; //XOR 0 removes decimal digits.
+    },
+    
+    /**
+     * Enforce a specific amount of decimal digits.
+     */
+    enforcePrecision : function(val, nDecimalDigits){
+        return +(val).toFixed(nDecimalDigits);
     }
 
 });
