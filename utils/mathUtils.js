@@ -9,24 +9,24 @@ define({
     /**
      * Clamps value inside range.
      */
-	clamp : function(val, min, max){
-		return val < min? min : (val > max? max : val);
-	},
-	
+    clamp : function(val, min, max){
+        return val < min? min : (val > max? max : val);
+    },
+    
     /**
      * Loops value inside range.
      */
-	loop : function(val, min, max){
-		return val < min? max : (val > max? min : val);
-	},
+    loop : function(val, min, max){
+        return val < min? max : (val > max? min : val);
+    },
     
     /**
      * Checks if value is inside the range.
      */
-	inRange : function(val, min, max, threshold){
-		threshold = threshold || 0;
-		return (val + threshold >= min && val - threshold <= max);
-	},
+    inRange : function(val, min, max, threshold){
+        threshold = threshold || 0;
+        return (val + threshold >= min && val - threshold <= max);
+    },
     
     /**
      * Check if value is close to target.
@@ -38,16 +38,16 @@ define({
     /**
      * Linear interpolation.
      */
-	lerp : function(ratio, start, end){
-		return start + (end - start) * ratio;
-	},
-	
+    lerp : function(ratio, start, end){
+        return start + (end - start) * ratio;
+    },
+    
     /**
      * Linear ratio. Gets normalized ratio of value inside range.
      */
-	lratio : function(val, start, end){
-		return (val - start) / (end - start);
-	},
+    lratio : function(val, start, end){
+        return (val - start) / (end - start);
+    },
     
     /**
     * Snap value to full steps. 
