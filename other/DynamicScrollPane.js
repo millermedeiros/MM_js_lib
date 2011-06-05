@@ -1,4 +1,4 @@
-define(['./ScrollPane', 'lib/js-signals'], function(ScrollPane, signals){
+define(['./ScrollPane', 'signals'], function(ScrollPane, signals){
 	
 	/**
 	 * Dynamic Scroll Pane - fetch/remove panels based on need.

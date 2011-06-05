@@ -1,5 +1,7 @@
 # MM_js_lib #
 
+https://github.com/millermedeiros/MM_js_lib/
+
 My Modular JavaScript Library
 
 **IMPORTANT: This Library is on an EARLY ALPHA state, the API is constantly changing.**

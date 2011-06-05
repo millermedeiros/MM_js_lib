@@ -1,4 +1,4 @@
-define(['./TouchController', 'lib/js-signals'], function(TouchController, signals){	
+define(['./TouchController', 'signals'], function(TouchController, signals){	
 	
 	function clamp(val, min, max){
 		return Math.max(Math.min(val, max), min);
