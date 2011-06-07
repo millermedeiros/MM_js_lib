@@ -33,7 +33,7 @@ define({
      */
     isNear : function(val, target, threshold){
         return (Math.abs(val - target) <= threshold);
-    }
+    },
 
     /**
      * Linear interpolation.
