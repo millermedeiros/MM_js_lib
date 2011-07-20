@@ -75,7 +75,7 @@ millermedeiros.rhino = {
 	
 	/**
 	 * Sanitize path slashes to system slashes
-	 * @param {string}
+	 * @param {string} path
 	 * @return {string}
 	 */
 	sanitizePath : function(path){

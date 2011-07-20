@@ -4,48 +4,63 @@ define(function(){
 	 * very basic image loader queue
 	 * - if you are using RequireJS favor require/image plugin.
 	 * @author Miller Medeiros
-	 * @version 0.0.2 (2011/02/13)
+	 * @version 0.0.3 (2011/07/11)
 	 */
-	var ImageLoaderQueue = function(items){
+    function ImageLoaderQueue(items){
 		this._items = items;
-	};
+	}
 	
 	ImageLoaderQueue.prototype = {
 		
-		numLoaded : 0,
+		_numLoaded : 0,
+
+        _cache : {},
 		
 		isComplete : function(){
-			return this.numLoaded >= this._items.length;
+			return this._numLoaded >= this._items.length;
 		},
 		
-		load : function(callback){
+		loadAll : function(callback){
 			var i = 0,
 				img,
 				numTotal = this._items.length,
 				hasCallback = (typeof callback === 'function'),
-				self = this;
+				self = this,
+                src;
 			
-			if(this.isComplete()){
+			if(hasCallback && this.isComplete()){
 				callback();
 				return;
 			}
 			
 			function registerLoad(evt){
 				delete evt.target.onload;
-				self.numLoaded += 1;
+				delete evt.target.onerror;
+				self._numLoaded += 1;
 				if(self.isComplete()){
 					callback();
 				}
-			}
+            }
 			
 			for(; i < numTotal; i++){
 				img = new Image();
+                src = this._items[i];
 				if(hasCallback){
-					img.onload = registerLoad;
+					img.onload = img.onerror = registerLoad;
 				}
-				img.src = this._items[i];
+				img.src = src;
+                self._cache[src] = img;
 			}
-		}
+		},
+
+        getImg : function(src){
+            return self._cache[src];
+        },
+
+        dispose : function(){
+            delete this._cache;
+            delete this._items;
+        }
 		
 	};
 	
