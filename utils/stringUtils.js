@@ -12,23 +12,26 @@ define(function(){
 
     /**
     * @namespace String Utilities
+    * @name stringUtils
     * @author Miller Medeiros
-    * @version 0.1.7 (2011/07/20)
+    * @version 0.1.8 (2011/07/28)
     * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
     */
     var stringUtils = {
-        
+
         /**
         * Remove white-spaces from beginning and end of string.
+        * @example stringUtils.trim('   lorem ipsum   ') -> 'lorem ipsum'
         * @param {string} str
         * @return {string}
         */
         trim : function(str){
             return (str || '').replace(/^\s+|\s+$/g, '');
         },
-        
+
         /**
         * Remove white-spaces from beginning of string.
+        * @example stringUtils.ltrim('   lorem ipsum   ') -> 'lorem ipsum   '
         * @param {string} str
         * @return {string}
         */
@@ -36,25 +39,31 @@ define(function(){
             return (str || '').replace(/^\s+/g, '');
         },
 
-
         /**
         * Remove white-spaces from end of string.
+        * @example stringUtils.rtrim('   lorem ipsum   ') -> '   lorem ipsum'
         * @param {string} str
         * @return {string}
         */
         rtrim : function(str){
             return (str || '').replace(/\s+$/g, '');
         },
-        
+
         /**
         * Limit number of chars.
         *  - ported from Miller Medeiros PHP lib
+        * @example stringUtils.crop('lorem ipsum dolor sit amet', 10) -> 'lorem...'
+        * @param {string} str
+        * @param {number} [maxChars] Default to 125 chars.
+        * @param {string} [append] Default to '...'
+        * @param {boolean} [stripHtml] Defaults to `true`. (note that it doesn't recognize HTML tags so they can and will be cropped on the middle)
+        * @return {string}
         */
         crop : function(str, maxChars, append, stripHtml){
             maxChars = maxChars || 125;
             append = append || '...';
-            stripHtml = true;
-            
+            stripHtml = stripHtml !== void(0)? stripHtml : true;
+
             str = stripHtml? this.stripHtmlTags(str) : str;
             if(str.length <= maxChars){
                 return str;
@@ -63,9 +72,10 @@ define(function(){
             str = str.substr(0, str.lastIndexOf(' ')); //crop at last space
             return str + append;
         },
-        
+
         /**
         * Format Title 
+        * @example stringUtils.toTitleFormat(['News', 'Lorem Ipsum'], 'Example.com') -> 'Lorem Ipsum | News | Example.com'
         * @param {array} pathTitles
         * @param {string}	[defaultTitle]
         * @param {string}	[separator]	Defaults to ' | '.
@@ -83,11 +93,11 @@ define(function(){
             }
             return this.stripHtmlTags(output.join(separator));
         },
-        
+
         /**
-        * Replaces spaces with hyphens, split camel case text, remove non-word chars, remove accents and convert to lower case.
+        * Replaces spaces with hyphens, split camelCase text, remove non-word chars, remove accents and convert to lower case.
         * - ported from Miller Medeiros Eclipse Monkey Scripts
-        * @example millermedeiros.stringUtils.hyphenate('lorem ipsum spéçïãl chârs') -> 'lorem-ipsum-special-chars'
+        * @example stringUtils.hyphenate('loremIpsum spéçïãl chârs') -> 'lorem-ipsum-special-chars'
         * @param {string} str
         * @return {string}
         */
@@ -99,11 +109,11 @@ define(function(){
                     .toLowerCase();
             return str;
         },
-        
+
         /**
         * Convert string to camelCase text.
         * - ported from Miller Medeiros Eclipse Monkey Scripts
-        * @example stringUtils.camelCase('my awesome text') -> 'myAwesomeText';
+        * @example stringUtils.camelCase('my awesome-text') -> 'myAwesomeText';
         * @param {string} str
         * @return {string}
         */
@@ -116,20 +126,22 @@ define(function(){
                     .replace(/^[A-Z]/g, toLower); //convert first char to lowercase
             return str;
         },
-        
+
         /**
          * UPPERCASE first char of each word.
          * - ported from Miller Medeiros Eclipse Monkey Scripts
+         * @example stringUtils.properCase('lorem ipsum') -> 'Lorem Ipsum'
          * @param {string} str
          * @return {string}
          */
         properCase : function(str){
             return toLower(str).replace(/^\w|\s\w/g, toUpper); //replace first char of each word to UPPERCASE
         },
-        
+
         /**
          * UPPERCASE first char of each sentence and lowercase other words.
          * - ported from Miller Medeiros Eclipse Monkey Scripts
+         * @example stringUtils.sentenceCase('Lorem Ipsum Dolor. maecennas Ullamcor.') -> 'Lorem ipsum dolor. Maecennas ullamcor.'
          * @param {string} str
          * @return {string}
          */
@@ -138,14 +150,27 @@ define(function(){
         },
 
         /**
+         * Group arguments as path segments, if any of the args is `null` it
+         * will be ignored from resulting path.
+         * @example stringUtils.makePath('lorem', 'ipsum', null, 'dolor') -> 'lorem/ipsum/dolor'
+         * @param {...string} args
+         * @return {string}
+         */
+        makePath : function(args){
+            args = Array.prototype.slice.call(arguments);
+            return args.join('/').replace(/\/+/g, '/');
+        },
+
+        /**
         * Replaces all chars with accents to regular ones
         * - ported from Miller Medeiros AS3 StringUtils.replaceAccents
+        * @example stringUtils.replaceAccents('lõrêm ípsûm') -> 'lorem ipsum'
         * @param {string} str
-        * @retunr {string}	formated string
+        * @return {string}	formated string
         */
         replaceAccents : function(str){
             str = str || '';
-            // verifies if the String has accents and replace accents
+            // verifies if the String has accents and replace them
             if (str.search(/[\xC0-\xFF]/g) > -1) {
                 str = str
                         .replace(/[\xC0-\xC5]/g, "A")
@@ -172,9 +197,10 @@ define(function(){
             }
             return str;
         },
-        
+
         /**
          * Remove non-word chars.
+         * @example stringUtils.removeNonWord('lorem! ipsum?') -> 'lorem ipsum'
          * @param {string} str
          * @return {string}
          */
@@ -190,16 +216,17 @@ define(function(){
         removeNonASCII : function(str){
             return (str || '').replace(/[^\x20-\x7E]/, ''); //matches non-printable ASCII chars - http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters
         },
-        
+
         /**
         * Remove HTML tags from string.
+        * @example stringUtils.stripHtmlTags('<p><em>lorem</em> <strong>ipsum</strong></p>') -> 'lorem ipsum'
         * @param {string} str
         * @return {string}
         */
         stripHtmlTags : function(str){
             return (str || '').replace(/<[^>]*>/g, '');
         }
-        
+
     };
 
     return stringUtils;
