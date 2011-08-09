@@ -1,11 +1,10 @@
 define(function(){
 
 /**
+ * @name eventFacade
  * @namespace DOM Event Listener Facade
- * - Cross-browser DOM Event Listener attachment/detachment.
- * - Based on Peter-Paul Koch addEventSimple <http://www.quirksmode.org/js/eventSimple.html>
  * @author Miller Medeiros <http://www.millermedeiros.com/>
- * @version 0.3 (2010/06/23)
+ * @version 0.4.0 (2011/08/09)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 var eventFacade = {
@@ -40,7 +39,63 @@ var eventFacade = {
 		}else{
 			elm['on' + eType] = null;
 		}
-	}
+	},
+    
+    /**
+     * @param {Event} [evt] Event
+     * @return {Event} Normalized Event object since IE doesn't pass Event as
+     * parameter to handler.
+     */
+    getEvent : function(evt){
+        return evt || window.event; //fix IE
+    },
+    
+    /**
+     * Get event target, normalize value across browsers (IE doesn't have
+     * event.target)
+     * @param {Event} [evt] Event
+     * @return {HTMLElement} Event target
+     */
+    getTarget : function(evt){
+        evt = eventFacade.getEvent(evt);
+        return evt.target || evt.srcElement; //normalize value on IE 
+    },
+    
+    /**
+     * Prevents event default behavior
+     * @param {Event} [evt] Event
+     */
+    preventDefault : function(evt){
+        evt = eventFacade.getEvent(evt);
+        if('preventDefault' in evt){
+            evt.preventDefault();
+        } else {
+            evt.returnValue = false;
+        }
+    },
+    
+    /**
+     * Stops event bubbling
+     * @param {Event} [evt] Event
+     */
+    stopPropagation : function(evt){
+        evt = eventFacade.getEvent(evt);
+        if('stopPropagation' in evt){
+            evt.stopPropagation();
+        } else {
+            evt.cancelBubble = true;
+        }
+    },
+    
+    /**
+     * Stops event bubbling and default behavior (alias to `stopPropagation`
+     * and `preventDefault`)
+     * @param {Event} [evt] Event
+     */
+    halt : function(evt){
+        eventFacade.stopPropagation(evt);
+        eventFacade.preventDefault(evt);
+    }
 	
 };
 

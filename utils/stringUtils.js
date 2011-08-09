@@ -14,7 +14,7 @@ define(function(){
     * @namespace String Utilities
     * @name stringUtils
     * @author Miller Medeiros
-    * @version 0.1.8 (2011/07/28)
+    * @version 0.1.9 (2011/07/29)
     * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
     */
     var stringUtils = {
@@ -64,6 +64,7 @@ define(function(){
             append = append || '...';
             stripHtml = stripHtml !== void(0)? stripHtml : true;
 
+            str = this.trim(str);
             str = stripHtml? this.stripHtmlTags(str) : str;
             if(str.length <= maxChars){
                 return str;
@@ -74,37 +75,40 @@ define(function(){
         },
 
         /**
-        * Format Title 
-        * @example stringUtils.toTitleFormat(['News', 'Lorem Ipsum'], 'Example.com') -> 'Lorem Ipsum | News | Example.com'
-        * @param {array} pathTitles
-        * @param {string}	[defaultTitle]
-        * @param {string}	[separator]	Defaults to ' | '.
-        * @return {string}
-        */
-        toTitleFormat : function(pathTitles, defaultTitle, separator){
-            separator = separator || ' | ';
-            var n = pathTitles.length,
-                output = [];
-            while(n--){
-                output.push(pathTitles[n]);
-            }
-            if(defaultTitle){
-                output.push(defaultTitle);
-            }
-            return this.stripHtmlTags(output.join(separator));
-        },
-
-        /**
         * Replaces spaces with hyphens, split camelCase text, remove non-word chars, remove accents and convert to lower case.
-        * - ported from Miller Medeiros Eclipse Monkey Scripts
-        * @example stringUtils.hyphenate('loremIpsum spéçïãl chârs') -> 'lorem-ipsum-special-chars'
+        * @example stringUtils.hyphenate('loremIpsum dolor spéçïãl chârs') -> 'lorem-ipsum-dolor-special-chars'
+        * @see stringUtils.toSlug
         * @param {string} str
         * @return {string}
         */
         hyphenate : function(str){
+            return this.toSlug( this.unCamelCase(str) );
+        },
+
+        /**
+         * Replaces hyphens with spaces. (only hyphens between word chars)
+         * @example stringUtils.unHyphenate('lorem-ipsum-dolor') -> 'lorem ipsum dolor'
+         * @param {string} str
+         * @return {string}
+         */
+        unHyphenate : function(str){
+            return (str || '').replace(/(\w)(-)(\w)/g, '$1 $3'); //convert hyphens between word chars to spaces
+        },
+
+        /**
+         * Convert to lower case, remove accents, remove non-word chars and
+         * replace spaces with hyphens.
+         * Only difference from `stringUtils.hyphenate`  is that it doesn't 
+         * split camelCase text.
+        * - ported from Miller Medeiros Eclipse Monkey Scripts
+         * @example stringUtils.toSlug('loremIpsum dolor spéçïãl chârs') -> 'loremipsum-dolor-special-chars'
+         * @see stringUtils.hyphenate
+         * @param {string} str
+         * @return {string}
+         */
+        toSlug : function(str){
             str = this.replaceAccents(str);
             str = this.removeNonWord(str)
-                    .replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, '$1 $2') //add space between camelCase text
                     .replace(/ +/g, '-') //replace spaces with hyphen
                     .toLowerCase();
             return str;
@@ -113,24 +117,34 @@ define(function(){
         /**
         * Convert string to camelCase text.
         * - ported from Miller Medeiros Eclipse Monkey Scripts
-        * @example stringUtils.camelCase('my awesome-text') -> 'myAwesomeText';
+        * @example stringUtils.camelCase('my --  awesome-text') -> 'myAwesomeText';
         * @param {string} str
         * @return {string}
         */
         camelCase : function(str){
             str = this.replaceAccents(str);
             str = this.removeNonWord(str)
-                    .replace(/\-/g, ' ') //convert hyphens to spaces
+                    .replace(/\-/g, ' ') //convert all hyphens to spaces
                     .replace(/\s[a-z]/g, toUpper) //convert first char of each word to UPPERCASE
                     .replace(/\s+/g, '') //remove spaces
                     .replace(/^[A-Z]/g, toLower); //convert first char to lowercase
             return str;
         },
+        
+        /**
+         * Add space between camelCase text.
+         * @example stringUtils.unCamelCase('loremIpsumDolor') -> 'lorem ipsum dolor'
+         * @param {string} str
+         * @return {string}
+         */
+        unCamelCase : function(str){
+            return (str || '').replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, '$1 $2').toLowerCase(); //add space between camelCase text
+        },
 
         /**
          * UPPERCASE first char of each word.
          * - ported from Miller Medeiros Eclipse Monkey Scripts
-         * @example stringUtils.properCase('lorem ipsum') -> 'Lorem Ipsum'
+         * @example stringUtils.properCase('loRem iPSum') -> 'Lorem Ipsum'
          * @param {string} str
          * @return {string}
          */
@@ -139,9 +153,9 @@ define(function(){
         },
 
         /**
-         * UPPERCASE first char of each sentence and lowercase other words.
+         * UPPERCASE first char of each sentence and lowercase other chars.
          * - ported from Miller Medeiros Eclipse Monkey Scripts
-         * @example stringUtils.sentenceCase('Lorem Ipsum Dolor. maecennas Ullamcor.') -> 'Lorem ipsum dolor. Maecennas ullamcor.'
+         * @example stringUtils.sentenceCase('Lorem IpSum DoLOr. maeCeNnas Ullamcor.') -> 'Lorem ipsum dolor. Maecennas ullamcor.'
          * @param {string} str
          * @return {string}
          */
