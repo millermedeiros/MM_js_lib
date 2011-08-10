@@ -14,7 +14,7 @@ define(function(){
     * @namespace String Utilities
     * @name stringUtils
     * @author Miller Medeiros
-    * @version 0.1.9 (2011/07/29)
+    * @version 0.2.0 (2011/08/10)
     * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
     */
     var stringUtils = {
@@ -54,22 +54,19 @@ define(function(){
         *  - ported from Miller Medeiros PHP lib
         * @example stringUtils.crop('lorem ipsum dolor sit amet', 10) -> 'lorem...'
         * @param {string} str
-        * @param {number} [maxChars] Default to 125 chars.
+        * @param {number} [maxChars] Default to 125 chars. (including append.length)
         * @param {string} [append] Default to '...'
-        * @param {boolean} [stripHtml] Defaults to `true`. (note that it doesn't recognize HTML tags so they can and will be cropped on the middle)
         * @return {string}
         */
-        crop : function(str, maxChars, append, stripHtml){
+        crop : function(str, maxChars, append){
             maxChars = maxChars || 125;
             append = append || '...';
-            stripHtml = stripHtml !== void(0)? stripHtml : true;
 
-            str = this.trim(str);
-            str = stripHtml? this.stripHtmlTags(str) : str;
+            str = stringUtils.trim(str);
             if(str.length <= maxChars){
                 return str;
             }
-            str = str.substr(0, maxChars);
+            str = str.substr(0, maxChars - append.length + 1);
             str = str.substr(0, str.lastIndexOf(' ')); //crop at last space
             return str + append;
         },
@@ -82,7 +79,7 @@ define(function(){
         * @return {string}
         */
         hyphenate : function(str){
-            return this.toSlug( this.unCamelCase(str) );
+            return stringUtils.toSlug( stringUtils.unCamelCase(str) );
         },
 
         /**
@@ -107,8 +104,9 @@ define(function(){
          * @return {string}
          */
         toSlug : function(str){
-            str = this.replaceAccents(str);
-            str = this.removeNonWord(str)
+            str = stringUtils.replaceAccents(str);
+            str = stringUtils.removeNonWord(str);
+            str = stringUtils.trim(str) //should come after removeNonWord
                     .replace(/ +/g, '-') //replace spaces with hyphen
                     .toLowerCase();
             return str;
@@ -122,8 +120,8 @@ define(function(){
         * @return {string}
         */
         camelCase : function(str){
-            str = this.replaceAccents(str);
-            str = this.removeNonWord(str)
+            str = stringUtils.replaceAccents(str);
+            str = stringUtils.removeNonWord(str)
                     .replace(/\-/g, ' ') //convert all hyphens to spaces
                     .replace(/\s[a-z]/g, toUpper) //convert first char of each word to UPPERCASE
                     .replace(/\s+/g, '') //remove spaces
@@ -176,8 +174,9 @@ define(function(){
         },
 
         /**
-        * Replaces all chars with accents to regular ones
+        * Replaces all accented chars with regular ones
         * - ported from Miller Medeiros AS3 StringUtils.replaceAccents
+        * - only covers Basic Latin and Latin-1 unicode chars.
         * @example stringUtils.replaceAccents('lõrêm ípsûm') -> 'lorem ipsum'
         * @param {string} str
         * @return {string}	formated string
@@ -228,7 +227,7 @@ define(function(){
         * @return {string}
         */
         removeNonASCII : function(str){
-            return (str || '').replace(/[^\x20-\x7E]/, ''); //matches non-printable ASCII chars - http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters
+            return (str || '').replace(/[^\x20-\x7E]/g, ''); //matches non-printable ASCII chars - http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters
         },
 
         /**

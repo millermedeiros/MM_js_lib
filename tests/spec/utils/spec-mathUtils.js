@@ -1,9 +1,9 @@
 define(['src/utils/mathUtils'], function(mathUtils){
 
-    describe('utils/mathUtils: Math utilities', function(){
+    describe('utils/mathUtils', function(){
 
 
-        describe('mathUtils.clamp()', function(){
+        describe('clamp()', function(){
             
             var clamp = mathUtils.clamp;
 
@@ -45,7 +45,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        describe('mathUtils.loop()', function(){
+        describe('loop()', function(){
                 
             var loop = mathUtils.loop;
 
@@ -73,7 +73,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        describe('mathUtils.inRange()', function(){
+        describe('inRange()', function(){
             
             var inRange = mathUtils.inRange;
 
@@ -108,7 +108,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
 
 
-        describe('mathUtils.isNear()', function(){
+        describe('isNear()', function(){
 
             var isNear = mathUtils.isNear;
 
@@ -131,7 +131,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
 
-        describe('mathUtils.lerp()', function(){
+        describe('lerp()', function(){
             
             var lerp = mathUtils.lerp;
 
@@ -145,7 +145,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
             
         });
         
-        describe('mathUtils.lratio()', function(){
+        describe('lratio()', function(){
 
             var lratio = mathUtils.lratio;
 
@@ -162,7 +162,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        describe('mathUtils.snap()', function(){
+        describe('snap()', function(){
             
             var snap = mathUtils.snap;
 
@@ -174,7 +174,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
             });
         });
 
-        describe('mathUtils.countSteps()', function(){
+        describe('countSteps()', function(){
             
             var countSteps = mathUtils.countSteps;
 
@@ -187,7 +187,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        describe('mathUtils.map()', function(){
+        describe('map()', function(){
             
             var map = mathUtils.map;
 
@@ -199,7 +199,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        describe('mathUtils.random()', function(){
+        describe('random()', function(){
             
             var random = mathUtils.random;
             
@@ -260,6 +260,10 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 var r = random(0, 10, true);
                 var t = random(0, 10, true);
                 var y = random(0, 10, true);
+                var u = random(0, 10, true);
+                var i = random(0, 10, true);
+                var o = random(0, 10, true);
+                var p = random(0, 10, true);
                 
                 expect( q ).toSnap(0, 10);
                 expect( w ).toSnap(0, 10);
@@ -268,11 +272,11 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 expect( t ).toSnap(0, 10);
                 expect( y ).toSnap(0, 10);
 
-                expect( q ).toDiffAny(w, e, r, t, y);
+                expect( q ).toDiffAny(w, e, r, t, y, u, i, o, p);
             });
 
         });
-        describe('mathUtils.randomInt()', function(){
+        describe('randomInt()', function(){
             
             var randomInt = mathUtils.randomInt;
             
@@ -355,7 +359,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         
-        describe('mathUtils.toInt()', function(){
+        describe('toInt()', function(){
         
             var toInt = mathUtils.toInt;
 
@@ -370,7 +374,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
 
-        describe('mathUtils.enforcePrecision()', function(){
+        describe('enforcePrecision()', function(){
         
             var enforcePrecision = mathUtils.enforcePrecision;
 
@@ -390,7 +394,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         
-        describe('mathUtils.MIN_INTEGER_VALUE', function(){
+        describe('MIN_INTEGER_VALUE', function(){
             
             it('should be equal -2 ^ 31', function(){
                 expect( mathUtils.MIN_INTEGER_VALUE ).toEqual( Math.pow(-2, 31) );
@@ -398,7 +402,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        describe('mathUtils.MAX_INTEGER_VALUE', function(){
+        describe('MAX_INTEGER_VALUE', function(){
             
             it('should be equal (2 ^ 31) - 1', function(){
                 expect( mathUtils.MAX_INTEGER_VALUE ).toEqual( Math.pow(2, 31) - 1 );

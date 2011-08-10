@@ -1,9 +1,9 @@
 define(['src/utils/lang'], function(lang){
 
-    describe('utils/lang: language utilities', function(){
+    describe('utils/lang', function(){
 
         
-        describe('lang.mixIn()', function(){
+        describe('mixIn()', function(){
 
             var a1, a2, a3, a4, 
                 a1_4,
@@ -38,7 +38,7 @@ define(['src/utils/lang'], function(lang){
         });
 
 
-        describe('lang.createObject()', function(){
+        describe('createObject()', function(){
 
             it('should create an object', function(){
                 
@@ -73,7 +73,7 @@ define(['src/utils/lang'], function(lang){
 
         });
 
-        describe('lang.inheritPrototype()', function(){
+        describe('inheritPrototype()', function(){
 
             it('should inherit prototype', function(){
 
@@ -106,7 +106,7 @@ define(['src/utils/lang'], function(lang){
 
         });
 
-        describe('lang.bind()', function(){
+        describe('bind()', function(){
 
             var o1 = {val : 'bar'};
             var o2 = {val : 123};
