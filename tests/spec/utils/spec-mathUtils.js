@@ -389,6 +389,23 @@ define(['src/utils/mathUtils'], function(mathUtils){
             });
         });
 
+        
+        describe('mathUtils.MIN_INTEGER_VALUE', function(){
+            
+            it('should be equal -2 ^ 31', function(){
+                expect( mathUtils.MIN_INTEGER_VALUE ).toEqual( Math.pow(-2, 31) );
+            });
+
+        });
+
+        describe('mathUtils.MAX_INTEGER_VALUE', function(){
+            
+            it('should be equal (2 ^ 31) - 1', function(){
+                expect( mathUtils.MAX_INTEGER_VALUE ).toEqual( Math.pow(2, 31) - 1 );
+            });
+
+        });
+
     //=====
 
     });
