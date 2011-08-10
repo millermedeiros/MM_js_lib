@@ -16,7 +16,8 @@
                     'src' : '../../src',
                     'jasmineUtils' : '../lib/jasmineUtils'
                 },
-                waitSeconds : (location.protocol === 'file:' || window.location.href.indexOf('localhost') !== -1)? 2 : 10 //fail early locally
+                waitSeconds : (location.protocol === 'file:' || location.href.indexOf('://localhost') !== -1)? 2 : 10, //fail early locally
+                urlArgs : 'bust=' + (+new Date)
             });
 
             //init
