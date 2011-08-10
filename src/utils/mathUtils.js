@@ -1,10 +1,15 @@
-/**
- * Math utilities
- * @author Miller Medeiros
- * @version 0.1.3 (2011/08/09)
- * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
- */
-define({
+define(function(){
+    
+    var MIN_VALUE = 1 << 31;
+
+    /**
+    * @name mathUtils
+    * @namespace Math utilities
+    * @author Miller Medeiros
+    * @version 0.1.4 (2011/08/09)
+    * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
+    */
+    var mathUtils = {
     
     /**
      * Clamps value inside range.
@@ -37,6 +42,7 @@ define({
 
     /**
      * Linear interpolation.
+     * IMPORTANT:will return `Infinity` if numbers overflow Number.MAX_VALUE
      */
     lerp : function(ratio, start, end){
         return start + (end - start) * ratio;
@@ -53,7 +59,7 @@ define({
     * Snap value to full steps. 
     */
     snap : function(val, step){
-        return this.countSteps(val, step) * step;
+        return mathUtils.countSteps(val, step) * step;
     },
     
     /**
@@ -68,24 +74,27 @@ define({
      * @example map(3, 0, 4, -1, 1) -> 0.5
      */
     map : function(val, min1, max1, min2, max2){
-        return this.lerp( this.lratio(val, min1, max1), min2, max2 );
+        return mathUtils.lerp( mathUtils.lratio(val, min1, max1), min2, max2 );
     },
     
     /**
      * Gets a random number inside range or snap to min/max values.
+     * @param {number} [min] Minimum value. Defaults to -2147483648
+     * @param {number} [max] Maximum value. Default to 2147483648
+     * @param {boolean} [shouldSnal] If it should snap random number to min/max. 
      */
     random : function(min, max, shouldSnap){
-        min = (min != null)? min : - Number.MAX_VALUE;
-        max = (max != null)? max : Number.MAX_VALUE;
+        min = (min != null)? min : MIN_VALUE;
+        max = (max != null)? max : -MIN_VALUE;
         var random = Math.random();
-        return shouldSnap? (random < 0.5? min : max) : this.lerp(random, min, max);
+        return shouldSnap? (random < 0.5? min : max) : mathUtils.lerp(random, min, max);
     },
     
     /**
      * Gets random integer inside range or snap to min/max values.
      */
     randomInt : function(min, max, shouldSnap){
-        return this.toInt( this.random(min, max, shouldSnap) );
+        return mathUtils.toInt( mathUtils.random(min, max, shouldSnap) );
     },
     
     /**
@@ -102,4 +111,7 @@ define({
         return +(val).toFixed(nDecimalDigits);
     }
 
+    };
+
+    return mathUtils;
 });

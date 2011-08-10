@@ -120,7 +120,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 expect( isNear(10, 10, 0.5) ).toEqual(true);
             });
 
-            it('should return true if val is not close to target +/- threshold', function(){
+            it('should return false if val is far from target +/- threshold', function(){
                 expect( isNear(10.51, 10, 0.5) ).toEqual(false);
                 expect( isNear(9.45, 10, 0.5) ).toEqual(false);
                 expect( isNear(9.1, 10, 0.5) ).toEqual(false);
@@ -128,6 +128,265 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 expect( isNear(8, 10, 0.5) ).toEqual(false);
             });
 
+        });
+
+
+        describe('mathUtils.lerp()', function(){
+            
+            var lerp = mathUtils.lerp;
+
+            it('interpolate values', function(){
+                expect( lerp(0.5, 0, 10) ).toEqual(5);
+                expect( lerp(0.75, 0, 100) ).toEqual(75);
+                expect( lerp(0.66, 0, 1000) ).toEqual(660);
+                expect( lerp(1, 0, 1000) ).toEqual(1000);
+                expect( lerp(0, 0, 1000) ).toEqual(0);
+            });
+            
+        });
+        
+        describe('mathUtils.lratio()', function(){
+
+            var lratio = mathUtils.lratio;
+
+            it('should normalize value inside range', function(){
+                expect( lratio(50, 0, 100) ).toEqual(0.5);
+                expect( lratio(200, 0, 500) ).toEqual(0.4);
+                expect( lratio(200, 0, 1000) ).toEqual(0.2);
+            });
+
+            it('should calculate ratio even outside range', function(){
+                expect( lratio(1500, 0, 1000) ).toEqual(1.5);
+                expect( lratio(-1500, 0, 1000) ).toEqual(-1.5);
+            });
+
+        });
+
+        describe('mathUtils.snap()', function(){
+            
+            var snap = mathUtils.snap;
+
+            it('snap value to full steps', function(){
+                expect( snap(12, 5) ).toEqual(10);
+                expect( snap(17, 5) ).toEqual(15);
+                expect( snap(122, 10) ).toEqual(120);
+                expect( snap(129, 10) ).toEqual(120);
+            });
+        });
+
+        describe('mathUtils.countSteps()', function(){
+            
+            var countSteps = mathUtils.countSteps;
+
+            it('count number of full steps', function(){
+                expect( countSteps(12, 5) ).toEqual(2);
+                expect( countSteps(17, 5) ).toEqual(3);
+                expect( countSteps(122, 10) ).toEqual(12);
+                expect( countSteps(129, 10) ).toEqual(12);
+            });
+
+        });
+
+        describe('mathUtils.map()', function(){
+            
+            var map = mathUtils.map;
+
+            it('map a number from one scale to another', function(){
+                expect( map(5, 0, 10, 10, 20) ).toEqual(15);
+                expect( map(-50, -100, 0, 0, 100) ).toEqual(50);
+                expect( map(0, -1, 1, 0, 100) ).toEqual(50);
+            });
+
+        });
+
+        describe('mathUtils.random()', function(){
+            
+            var random = mathUtils.random;
+            
+            beforeEach(function(){
+                this.addMatchers({
+                    toSnap : function(min, max){
+                        return this.actual === min || this.actual === max;
+                    },
+                    toDiffAny : function(vals){
+                        var n = arguments.length;
+                        while(n--){
+                            if(this.actual !== arguments[n]) return true;
+                        }
+                        return false;
+                    }
+                });
+            });
+
+            it('returns a random number at each call', function(){
+                var q = random();
+                var w = random();
+                var e = random();
+                var r = random();
+                var t = random();
+                var y = random();
+                expect( q ).not.toBeUndefined();
+                expect( q ).not.toEqual( Number.Infinity );
+                expect( q ).toDiffAny(w, e, r, t, y);
+            });
+
+            it('returns a random number inside range', function(){
+                var q = random(0, 9999);
+                var w = random(0, 9999);
+                var e = random(0, 9999);
+                var r = random(0, 9999);
+                var t = random(0, 9999);
+                var y = random(0, 9999);
+                expect( q ).toBeLessThan(9999.01);
+                expect( q ).toBeGreaterThan(-0.01);
+                expect( w ).toBeLessThan(9999.01);
+                expect( w ).toBeGreaterThan(-0.01);
+                expect( e ).toBeLessThan(9999.01);
+                expect( e ).toBeGreaterThan(-0.01);
+                expect( r ).toBeLessThan(9999.01);
+                expect( r ).toBeGreaterThan(-0.01);
+                expect( t ).toBeLessThan(9999.01);
+                expect( t ).toBeGreaterThan(-0.01);
+                expect( y ).toBeLessThan(9999.01);
+                expect( y ).toBeGreaterThan(-0.01);
+
+                expect( q ).toDiffAny(w, e, r, t, y);
+            });
+
+            it('snap to min or max', function(){
+                var q = random(0, 10, true);
+                var w = random(0, 10, true);
+                var e = random(0, 10, true);
+                var r = random(0, 10, true);
+                var t = random(0, 10, true);
+                var y = random(0, 10, true);
+                
+                expect( q ).toSnap(0, 10);
+                expect( w ).toSnap(0, 10);
+                expect( e ).toSnap(0, 10);
+                expect( r ).toSnap(0, 10);
+                expect( t ).toSnap(0, 10);
+                expect( y ).toSnap(0, 10);
+
+                expect( q ).toDiffAny(w, e, r, t, y);
+            });
+
+        });
+        describe('mathUtils.randomInt()', function(){
+            
+            var randomInt = mathUtils.randomInt;
+            
+            beforeEach(function(){
+                this.addMatchers({
+                    toSnap : function(min, max){
+                        return this.actual === min || this.actual === max;
+                    },
+                    toDiffAny : function(vals){
+                        var n = arguments.length;
+                        while(n--){
+                            if(this.actual !== arguments[n]) return true;
+                        }
+                        return false;
+                    }
+                });
+            });
+
+            it('returns a random number at each call', function(){
+                var q = randomInt();
+                var w = randomInt();
+                var e = randomInt();
+                var r = randomInt();
+                var t = randomInt();
+                var y = randomInt();
+                expect( q ).not.toBeUndefined();
+                expect( q ).not.toEqual( Number.Infinity );
+                expect( q ).toDiffAny(w, e, r, t, y);
+            });
+
+            it('returns a random number inside range', function(){
+                var q = randomInt(0, 9999);
+                var w = randomInt(0, 9999);
+                var e = randomInt(0, 9999);
+                var r = randomInt(0, 9999);
+                var t = randomInt(0, 9999);
+                var y = randomInt(0, 9999);
+                expect( q ).toBeLessThan(9999.01);
+                expect( q ).toBeGreaterThan(-0.01);
+                expect( w ).toBeLessThan(9999.01);
+                expect( w ).toBeGreaterThan(-0.01);
+                expect( e ).toBeLessThan(9999.01);
+                expect( e ).toBeGreaterThan(-0.01);
+                expect( r ).toBeLessThan(9999.01);
+                expect( r ).toBeGreaterThan(-0.01);
+                expect( t ).toBeLessThan(9999.01);
+                expect( t ).toBeGreaterThan(-0.01);
+                expect( y ).toBeLessThan(9999.01);
+                expect( y ).toBeGreaterThan(-0.01);
+
+                expect( q ).toDiffAny(w, e, r, t, y);
+            });
+
+            it('snap to min or max', function(){
+                var q = randomInt(0, 10.5, true);
+                var w = randomInt(0.5, 10, true);
+                var e = randomInt(0, 10, true);
+                var r = randomInt(0, 10, true);
+                var t = randomInt(0, 10, true);
+                var y = randomInt(0, 10, true);
+                var u = randomInt(0, 10, true);
+                var i = randomInt(0, 10, true);
+                var o = randomInt(0, 10, true);
+                var p = randomInt(0, 10, true);
+                
+                expect( q ).toSnap(0, 10);
+                expect( w ).toSnap(0, 10);
+                expect( e ).toSnap(0, 10);
+                expect( r ).toSnap(0, 10);
+                expect( t ).toSnap(0, 10);
+                expect( y ).toSnap(0, 10);
+                expect( u ).toSnap(0, 10);
+                expect( i ).toSnap(0, 10);
+                expect( o ).toSnap(0, 10);
+                expect( p ).toSnap(0, 10);
+
+                expect( q ).toDiffAny(w, e, r, t, y, u, i, o, p);
+            });
+
+        });
+
+        
+        describe('mathUtils.toInt()', function(){
+        
+            var toInt = mathUtils.toInt;
+
+            it('should remove decimal digits', function(){
+                expect( toInt(1.25) ).toEqual(1);
+                expect( toInt(0.75) ).toEqual(0);
+                expect( toInt(2.999) ).toEqual(2);
+                expect( toInt(10.0001) ).toEqual(10);
+                expect( toInt(-5.0001) ).toEqual(-5);
+                expect( toInt(-9.99999) ).toEqual(-9);
+            });
+        });
+
+
+        describe('mathUtils.enforcePrecision()', function(){
+        
+            var enforcePrecision = mathUtils.enforcePrecision;
+
+            it('should remove unnecessary precision', function(){
+                var n = 3.12 * 0.01; //0.031200000000000002 because of floating point precision error (http://en.wikipedia.org/wiki/Floating_point#Accuracy_problems)
+                expect( n ).not.toEqual( 0.0312 );
+                expect( enforcePrecision(n, 4) ).toEqual( 0.0312 ); //"fix" floating point precision error
+                expect( enforcePrecision(n, 2) ).toEqual( 0.03 );
+                expect( enforcePrecision(n, 0) ).toEqual( 0 );
+
+                //string comparison to make sure it is triming number
+                expect( n + '' ).not.toEqual( '0.0312' );
+                expect( enforcePrecision(n, 4) + '' ).toEqual( '0.0312' );
+                expect( enforcePrecision(n, 2) + ''  ).toEqual( '0.03' );
+                expect( enforcePrecision(n, 0) + ''  ).toEqual( '0' );
+            });
         });
 
     //=====
