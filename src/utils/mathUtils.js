@@ -1,7 +1,7 @@
 /**
  * Math utilities
  * @author Miller Medeiros
- * @version 0.1.2 (2011/06/05)
+ * @version 0.1.3 (2011/08/09)
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 define({
@@ -75,7 +75,7 @@ define({
      * Gets a random number inside range or snap to min/max values.
      */
     random : function(min, max, shouldSnap){
-        min = (min != null)? min : Number.MIN_VALUE;
+        min = (min != null)? min : - Number.MAX_VALUE;
         max = (max != null)? max : Number.MAX_VALUE;
         var random = Math.random();
         return shouldSnap? (random < 0.5? min : max) : this.lerp(random, min, max);

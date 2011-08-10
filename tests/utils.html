@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jasmine Test Runner</title>
+        <link rel="stylesheet" href="lib/jasmine/jasmine.css">
+        <script src="lib/jasmine/jasmine.js"></script>
+        <script src="lib/jasmine/jasmine-html.js"></script>
+    </head>
+    <body>
+        <script src="lib/requirejs/require.js"></script>
+        <script>
+            //config
+            require({
+                baseUrl : 'spec',
+                paths : {
+                    'src' : '../../src',
+                    'jasmineUtils' : '../lib/jasmineUtils'
+                },
+                waitSeconds : (location.protocol === 'file:' || window.location.href.indexOf('localhost') !== -1)? 2 : 10 //fail early locally
+            });
+
+            //init
+            require(
+                [
+                    'jasmineUtils', 
+                    'utils/spec-mathUtils',
+                    'utils/spec-lang'
+                ], 
+                function(jasmineUtils){
+                    jasmineUtils.runSpecs();
+                }
+            );
+        </script>
+    </body>
+</html>
