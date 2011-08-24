@@ -9,10 +9,10 @@ define({
      * @param {string} template String containing {{tokens}}.
      * @param {object} data Object containing replacement values.
      */
-	parse : function(template, data){
-		function replaceFn(match, prop){
-			return (prop in data)? data[prop] : '';
-		}
-		return template.replace(/\{\{(\w+)\}\}/g, replaceFn);
-	}
+    parse : function(template, data){
+        function replaceFn(match, prop){
+            return (prop in data)? data[prop] : '';
+        }
+        return template.replace(/\{\{(\w+)\}\}/g, replaceFn);
+    }
 });

@@ -5,26 +5,26 @@
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 define(function(){
-	
-	function delegate(targetElm, selector, evtType, callback){
-		if(! targetElm) return;
-		
-		var elms = [].slice.call(targetElm.querySelectorAll(selector));
-		
-		function delegateHandler(evt){
-			var node = evt.target;
-			while(node && elms.indexOf(node)<0){
-				node = node.parentNode;
-			}
-			if(node && node !== targetElm){
-				callback.call(node, evt);
-			}
-		}
-		targetElm.addEventListener(evtType, delegateHandler, false);
-	}
-	
-	return{
-		delegate : delegate		
-	};
-	
+    
+    function delegate(targetElm, selector, evtType, callback){
+        if(! targetElm) return;
+        
+        var elms = [].slice.call(targetElm.querySelectorAll(selector));
+        
+        function delegateHandler(evt){
+            var node = evt.target;
+            while(node && elms.indexOf(node)<0){
+                node = node.parentNode;
+            }
+            if(node && node !== targetElm){
+                callback.call(node, evt);
+            }
+        }
+        targetElm.addEventListener(evtType, delegateHandler, false);
+    }
+    
+    return{
+        delegate : delegate     
+    };
+    
 });

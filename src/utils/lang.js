@@ -17,7 +17,7 @@ define(function(){
         * Combine properties from all the objects into first one.
         * - This method affects target object in place, if you want to create a new Object pass an empty object as first param.
         * @param {object} target    Target Object
-        * @param {...object} objects	Objects to be combined (0...n objects).
+        * @param {...object} objects    Objects to be combined (0...n objects).
         * @return {object} Target Object.
         */
         mixIn : function(target, objects){
@@ -37,8 +37,8 @@ define(function(){
         /**
         * Inherit prototype from another Object.
         * - inspired by Nicholas Zackas <http://nczonline.net> Solution
-        * @param {object} child	Child object
-        * @param {object} parent	Parent Object
+        * @param {object} child Child object
+        * @param {object} parent    Parent Object
         */
         inheritPrototype : function(child, parent){
             var p = lang.createObject(parent.prototype);
@@ -49,8 +49,8 @@ define(function(){
         /**
         * Create Object using prototypal inheritance and setting custom properties.
         * - Mix between Douglas Crockford Prototypal Inheritance <http://javascript.crockford.com/prototypal.html> and the EcmaScript 5 `Object.create()` method.
-        * @param {object} parent	Parent Object.
-        * @param {object} props	Object properties.
+        * @param {object} parent    Parent Object.
+        * @param {object} props Object properties.
         * @return {object} cloned Object.
         */
         createObject : function(parent, props){
@@ -61,9 +61,9 @@ define(function(){
         
         /**
         * Return a function that will execute in the given context, optionally adding any additional supplied parameters to the beginning of the arguments collection.
-        * @param {Function} fn	Function.
-        * @param {object} context	Execution context.
-        * @param {rest} args	Arguments (0...n arguments).
+        * @param {Function} fn  Function.
+        * @param {object} context   Execution context.
+        * @param {rest} args    Arguments (0...n arguments).
         * @return {Function} Wrapped Function.
         */
         bind : function(fn, context, args){

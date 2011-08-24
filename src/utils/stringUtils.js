@@ -179,7 +179,7 @@ define(function(){
         * - only covers Basic Latin and Latin-1 unicode chars.
         * @example stringUtils.replaceAccents('lõrêm ípsûm') -> 'lorem ipsum'
         * @param {string} str
-        * @return {string}	formated string
+        * @return {string}  formated string
         */
         replaceAccents : function(str){
             str = str || '';

@@ -9,37 +9,37 @@ define(function(){
  */
 var eventFacade = {
 
-	/**
-	* Adds DOM Event Listener
-	* @param {Element} elm Element.
-	* @param {string} eType Event type.
-	* @param {Function} fn Listener function.
-	*/
-	addListener : function(elm, eType, fn){
-		if(elm.addEventListener){
-			elm.addEventListener(eType, fn, false);
-		}else if(elm.attachEvent){
-			elm.attachEvent('on' + eType, fn);
-		}else{
-			elm['on' + eType] = fn;
-		}
-	},
-	
-	/**
-	* Removes DOM Event Listener
-	* @param {Element} elm Element.
-	* @param {string} eType Event type.
-	* @param {Function} fn Listener function.
-	*/
-	removeListener : function(elm, eType, fn){
-		if(elm.removeEventListener){
-			elm.removeEventListener(eType, fn, false);
-		}else if(elm.detachEvent){
-			elm.detachEvent('on' + eType, fn);
-		}else{
-			elm['on' + eType] = null;
-		}
-	},
+    /**
+    * Adds DOM Event Listener
+    * @param {Element} elm Element.
+    * @param {string} eType Event type.
+    * @param {Function} fn Listener function.
+    */
+    addListener : function(elm, eType, fn){
+        if(elm.addEventListener){
+            elm.addEventListener(eType, fn, false);
+        }else if(elm.attachEvent){
+            elm.attachEvent('on' + eType, fn);
+        }else{
+            elm['on' + eType] = fn;
+        }
+    },
+    
+    /**
+    * Removes DOM Event Listener
+    * @param {Element} elm Element.
+    * @param {string} eType Event type.
+    * @param {Function} fn Listener function.
+    */
+    removeListener : function(elm, eType, fn){
+        if(elm.removeEventListener){
+            elm.removeEventListener(eType, fn, false);
+        }else if(elm.detachEvent){
+            elm.detachEvent('on' + eType, fn);
+        }else{
+            elm['on' + eType] = null;
+        }
+    },
     
     /**
      * @param {Event} [evt] Event
@@ -96,7 +96,7 @@ var eventFacade = {
         eventFacade.stopPropagation(evt);
         eventFacade.preventDefault(evt);
     }
-	
+    
 };
 
 return eventFacade;
