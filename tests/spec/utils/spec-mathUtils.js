@@ -187,14 +187,14 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        describe('map()', function(){
+        describe('norm()', function(){
             
-            var map = mathUtils.map;
+            var norm = mathUtils.norm;
 
             it('map a number from one scale to another', function(){
-                expect( map(5, 0, 10, 10, 20) ).toEqual(15);
-                expect( map(-50, -100, 0, 0, 100) ).toEqual(50);
-                expect( map(0, -1, 1, 0, 100) ).toEqual(50);
+                expect( norm(5, 0, 10, 10, 20) ).toEqual(15);
+                expect( norm(-50, -100, 0, 0, 100) ).toEqual(50);
+                expect( norm(0, -1, 1, 0, 100) ).toEqual(50);
             });
 
         });
@@ -358,57 +358,6 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
 
-        
-        describe('toInt()', function(){
-        
-            var toInt = mathUtils.toInt;
-
-            it('should remove decimal digits', function(){
-                expect( toInt(1.25) ).toEqual(1);
-                expect( toInt(0.75) ).toEqual(0);
-                expect( toInt(2.999) ).toEqual(2);
-                expect( toInt(10.0001) ).toEqual(10);
-                expect( toInt(-5.0001) ).toEqual(-5);
-                expect( toInt(-9.99999) ).toEqual(-9);
-            });
-        });
-
-
-        describe('enforcePrecision()', function(){
-        
-            var enforcePrecision = mathUtils.enforcePrecision;
-
-            it('should remove unnecessary precision', function(){
-                var n = 3.12 * 0.01; //0.031200000000000002 because of floating point precision error (http://en.wikipedia.org/wiki/Floating_point#Accuracy_problems)
-                expect( n ).not.toEqual( 0.0312 );
-                expect( enforcePrecision(n, 4) ).toEqual( 0.0312 ); //"fix" floating point precision error
-                expect( enforcePrecision(n, 2) ).toEqual( 0.03 );
-                expect( enforcePrecision(n, 0) ).toEqual( 0 );
-
-                //string comparison to make sure it is triming number
-                expect( n + '' ).not.toEqual( '0.0312' );
-                expect( enforcePrecision(n, 4) + '' ).toEqual( '0.0312' );
-                expect( enforcePrecision(n, 2) + ''  ).toEqual( '0.03' );
-                expect( enforcePrecision(n, 0) + ''  ).toEqual( '0' );
-            });
-        });
-
-        
-        describe('MIN_INTEGER_VALUE', function(){
-            
-            it('should be equal -2 ^ 31', function(){
-                expect( mathUtils.MIN_INTEGER_VALUE ).toEqual( Math.pow(-2, 31) );
-            });
-
-        });
-
-        describe('MAX_INTEGER_VALUE', function(){
-            
-            it('should be equal (2 ^ 31) - 1', function(){
-                expect( mathUtils.MAX_INTEGER_VALUE ).toEqual( Math.pow(2, 31) - 1 );
-            });
-
-        });
 
     //=====
 

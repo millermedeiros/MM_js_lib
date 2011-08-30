@@ -19,7 +19,7 @@
     "curly" : false,
     "debug" : false,
     "eqeqeq" : false,
-    "eqnull" : false,
+    "eqnull" : true,
     "es5" : true,
     "evil" : false,
     "expr" : true,
