@@ -8,12 +8,12 @@ define(function(){
  * Released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
 var EventDispatcher = function(){
-    /** 
+    /**
      * Event Handlers
      * @type Object.<string, Array.<Function>>
      */
     this._handlers = {};
-    
+
     /**
      * Disabled Event Types (events types that shouldn't be dispatched)
      * @type Array.<string>
@@ -22,7 +22,7 @@ var EventDispatcher = function(){
 };
 
 EventDispatcher.prototype = {
-    
+
     /**
      * Add Event Listener
      * @param {string} eType    Event Type.
@@ -34,7 +34,7 @@ EventDispatcher.prototype = {
         }
         this._handlers[eType].push(fn);
     },
-    
+
     /**
      * Remove Event Listener
      * @param {string} eType    Event Type.
@@ -57,7 +57,7 @@ EventDispatcher.prototype = {
             }
         }
     },
-    
+
     /**
      * Removes all Listeners from the EventDispatcher object.
      * @param {(string|boolean)} eType  Event type or `true` if want to remove listeners of all event types.
@@ -69,9 +69,9 @@ EventDispatcher.prototype = {
             this._handlers = {};
         }
     },
-    
+
     /**
-     * Checks if the EventDispatcher has any listeners registered for a specific type of event. 
+     * Checks if the EventDispatcher has any listeners registered for a specific type of event.
      * @param {string} eType    Event Type.
      * @return {boolean}
      */
@@ -101,10 +101,10 @@ EventDispatcher.prototype = {
         }
         return false;
     },
-    
+
     /**
      * Check if Event will be dispatched (i.e. If event type is enabled)
-     * @param {string} evtType  Event type. 
+     * @param {string} evtType  Event type.
      * @return {boolean} If Event will be dispatched.
      */
     willDispatch : function(evtType){
@@ -116,7 +116,7 @@ EventDispatcher.prototype = {
         }
         return true;
     },
-    
+
     /**
      * Disable Event dispatching by type
      * @param {...string} evtTypes  Event types that should be disabled (events types that shouldn't be dispatched)
@@ -132,7 +132,7 @@ EventDispatcher.prototype = {
             }
          }
     },
-    
+
     /**
      * Enable Event dispatching by type
      * @param {...string} evtTypes  Event types that should be enabled (events types that should be dispatched)
@@ -152,7 +152,7 @@ EventDispatcher.prototype = {
             }
          }
     }
-    
+
 };
 
 return EventDispatcher;

@@ -1,5 +1,5 @@
 define(['signals', './TouchController'], function(signals, TouchController){
-    
+
     /**
      * Helper for swipe gestures
      * @author Miller Medeiros
@@ -20,7 +20,7 @@ define(['signals', './TouchController'], function(signals, TouchController){
         this.swipedRight = new signals.Signal();
 
         tc.touchEnded.add(this._endedHandler, this);
-        
+
         this.threshold = thold;
         this._touchController = tc;
     }
