@@ -25,7 +25,7 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
 
     /**
      * Touch events abstraction
-     * @version 0.3.1 (2011/10/10)
+     * @version 0.3.2 (2011/10/14)
      * @author Miller Medeiros
      */
     function TouchController(targetElm){
@@ -47,8 +47,8 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
         var e = normalizeEvent(evt);
 
         this._touchStartTime = getTime();
-        this._startPos.x = e.pageX;
-        this._startPos.y = e.pageY;
+        this._startPos.x = e.clientX;
+        this._startPos.y = e.clientY;
         this._changePos.x = this._changePos.y = 0;
 
         eventFacade.addListener(document, _moveType, this._touchMoveHandler);
@@ -64,8 +64,8 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
                 y : this._changePos.y
             };
 
-        this._changePos.x = e.pageX - this._startPos.x;
-        this._changePos.y = e.pageY - this._startPos.y;
+        this._changePos.x = e.clientX - this._startPos.x;
+        this._changePos.y = e.clientY - this._startPos.y;
 
         lastChange.x = this._changePos.x - lastChange.x;
         lastChange.y = this._changePos.y - lastChange.y;
