@@ -4,7 +4,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
 
         describe('clamp()', function(){
-            
+
             var clamp = mathUtils.clamp;
 
             it('should return max if val bigger than max', function(){
@@ -46,7 +46,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         describe('loop()', function(){
-                
+
             var loop = mathUtils.loop;
 
             it('should return `min` if `val` is bigger than `max`', function(){
@@ -74,7 +74,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         describe('inRange()', function(){
-            
+
             var inRange = mathUtils.inRange;
 
             it('should return true if val is inside range', function(){
@@ -93,7 +93,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 expect( inRange(51, -50, 50) ).toEqual(false);
                 expect( inRange(-11, -10, -2) ).toEqual(false);
             });
-            
+
             it('should tolerate threshold', function(){
                 expect( inRange(12, 1, 10, 2) ).toEqual(true);
                 expect( inRange(500, 1, 100, 400) ).toEqual(true);
@@ -132,7 +132,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
 
         describe('lerp()', function(){
-            
+
             var lerp = mathUtils.lerp;
 
             it('interpolate values', function(){
@@ -142,9 +142,9 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 expect( lerp(1, 0, 1000) ).toEqual(1000);
                 expect( lerp(0, 0, 1000) ).toEqual(0);
             });
-            
+
         });
-        
+
         describe('lratio()', function(){
 
             var lratio = mathUtils.lratio;
@@ -163,7 +163,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         describe('snap()', function(){
-            
+
             var snap = mathUtils.snap;
 
             it('snap value to full steps', function(){
@@ -175,7 +175,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         describe('countSteps()', function(){
-            
+
             var countSteps = mathUtils.countSteps;
 
             it('count number of full steps', function(){
@@ -188,7 +188,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         describe('norm()', function(){
-            
+
             var norm = mathUtils.norm;
 
             it('map a number from one scale to another', function(){
@@ -200,9 +200,9 @@ define(['src/utils/mathUtils'], function(mathUtils){
         });
 
         describe('random()', function(){
-            
+
             var random = mathUtils.random;
-            
+
             beforeEach(function(){
                 this.addMatchers({
                     toSnap : function(min, max){
@@ -264,7 +264,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 var i = random(0, 10, true);
                 var o = random(0, 10, true);
                 var p = random(0, 10, true);
-                
+
                 expect( q ).toSnap(0, 10);
                 expect( w ).toSnap(0, 10);
                 expect( e ).toSnap(0, 10);
@@ -277,9 +277,9 @@ define(['src/utils/mathUtils'], function(mathUtils){
 
         });
         describe('randomInt()', function(){
-            
+
             var randomInt = mathUtils.randomInt;
-            
+
             beforeEach(function(){
                 this.addMatchers({
                     toSnap : function(min, max){
@@ -341,7 +341,7 @@ define(['src/utils/mathUtils'], function(mathUtils){
                 var i = randomInt(0, 10, true);
                 var o = randomInt(0, 10, true);
                 var p = randomInt(0, 10, true);
-                
+
                 expect( q ).toSnap(0, 10);
                 expect( w ).toSnap(0, 10);
                 expect( e ).toSnap(0, 10);

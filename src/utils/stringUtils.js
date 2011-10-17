@@ -95,7 +95,7 @@ define(function(){
         /**
          * Convert to lower case, remove accents, remove non-word chars and
          * replace spaces with hyphens.
-         * Only difference from `stringUtils.hyphenate`  is that it doesn't 
+         * Only difference from `stringUtils.hyphenate`  is that it doesn't
          * split camelCase text.
         * - ported from Miller Medeiros Eclipse Monkey Scripts
          * @example stringUtils.toSlug('loremIpsum dolor spéçïãl chârs') -> 'loremipsum-dolor-special-chars'
@@ -128,7 +128,7 @@ define(function(){
                     .replace(/^[A-Z]/g, toLower); //convert first char to lowercase
             return str;
         },
-        
+
         /**
          * Add space between camelCase text.
          * @example stringUtils.unCamelCase('loremIpsumDolor') -> 'lorem ipsum dolor'
