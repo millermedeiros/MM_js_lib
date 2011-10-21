@@ -6,14 +6,24 @@ My Modular JavaScript Library
 
 **IMPORTANT: This Library is on an EARLY ALPHA state, the API is constantly changing.**
 
+A **good part of this library will be refactored and moved over** to the
+[amd-utils repository](https://github.com/millermedeiros/amd-utils/), be sure
+to check it as well.
+
+Code here may depend on modules from [amd-utils](https://github.com/millermedeiros/amd-utils/),
+run `git submodule init` and `git submodule update` after cloning the
+repository.
+
+
 
 ## Overview ##
 
 This is a collection of JavaScript *classes/helpers/methods/modules* created
-for personal use and also for learning purposes.
+for personal use.
 
 It was created to be used when only some specific features are required
-avoiding the use of a full bloated framework when it isn't really necessary.
+avoiding the use of a full bloated framework when it isn't really necessary and
+also to provide features that aren't present on other libs.
 
 Files are written in the AMD module format and require an AMD loader and/or
 optimizer to work, I recommend [RequireJS](http://requirejs.org/).
@@ -66,9 +76,9 @@ a active development community, such as [dojo toolkit](http://www.dojotoolkit.or
 [jQuery](http://jquery.com) and [MooTools](http://mootools.net).
 
 Use it if you are feeling adventurous and know how to fix bugs. Until now it
-doesn't have any unit tests and code structure is being changed without running
-it on the browser or any other environment even once. I'm improving it based on
-my needs and fixing bugs when I need that feature.
+doesn't have any unit tests for most of the code and structure is being changed
+without running it on the browser or any other environment even once. I'm
+improving it based on my needs and fixing bugs when I need that feature.
 
 This library was created mainly to be used on small to medium web sites and to
 be a starting point and/or reference to other implementations.

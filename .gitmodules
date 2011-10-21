@@ -1,0 +1,3 @@
+[submodule "lib/amd-utils"]
+	path = lib/amd-utils
+	url = git://github.com/millermedeiros/amd-utils.git
