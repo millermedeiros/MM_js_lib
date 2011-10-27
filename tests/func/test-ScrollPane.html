@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Test ScrollPane</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            #pane-frame, .pane{width:250px; height:300px}
+            .pane{float:left; line-height:250px; text-align:center; font-size:2em}
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <h1>ScrollPane</h1>
+            <div id="pane-frame">
+                <div id="pane-content"></div>
+            </div>
+            <div id="status"></div>
+        </div>
+        <script src="config.js"></script>
+        <script data-main="test-ScrollPane.js" src="../lib/requirejs/require.js"></script>
+    </body>
+</html>
