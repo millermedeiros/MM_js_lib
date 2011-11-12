@@ -4,7 +4,7 @@
  * sections should implement `init(urlParamsArr)` method.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.5.0 (2011/11/12)
+ * @version 0.5.1 (2011/11/12)
  * @author Miller Medeiros
  */
 define(
@@ -178,13 +178,15 @@ define(
         }
 
         function endPrevSection() {
-            if (! _prevSection || ! _prevSection.ended) {
+            if (_prevSection && _prevSection.ended) {
+                _prevSection.ended.addOnce(_endedPrevSection.dispatch, _endedPrevSection);
+            } else {
                 //ensure it will always dispatch signal
                 _endedPrevSection.dispatch();
-                return;
             }
-            if (_prevSection.ended) _prevSection.ended.addOnce(_endedPrevSection.dispatch, _endedPrevSection);
-            if (_prevSection.end) _prevSection.end();
+            if (_prevSection && _prevSection.end) {
+                _prevSection.end();
+            }
             _prevSection = null;
         }
 
