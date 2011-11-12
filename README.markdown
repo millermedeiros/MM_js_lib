@@ -11,9 +11,10 @@ A **good part of this library will be refactored and moved over** to the
 [requirejs-plugins repository](https://github.com/millermedeiros/requirejs-plugins),
 be sure to check them as well.
 
-Code here may depend on modules from [amd-utils](https://github.com/millermedeiros/amd-utils/),
-run `git submodule init` and `git submodule update` after cloning the
-repository.
+Code here may depend on modules from
+[amd-utils](https://github.com/millermedeiros/amd-utils/) and other third-party
+libraries, run `git submodule init` and `git submodule update` after cloning
+the repository.
 
 
 
@@ -24,7 +25,8 @@ for personal use.
 
 It was created to be used when only some specific features are required
 avoiding the use of a full bloated framework when it isn't really necessary and
-also to provide features that aren't present on other libs.
+also to provide features that aren't present on other libs. Some modules
+depends on third-party libraries to work tho.
 
 Files are written in the AMD module format and require an AMD loader and/or
 optimizer to work, I recommend [RequireJS](http://requirejs.org/).
@@ -58,7 +60,7 @@ optimizer to work, I recommend [RequireJS](http://requirejs.org/).
    tested on [quirks mode](http://www.quirksmode.org/css/quirksmode.html).
  - Some functionalities may not work properly on specific mobile devices.
  - I will probably only test the code on the latest non-beta version of
-   Firefox, Safari, Chrome, Opera and also IE6+.
+   Firefox, Safari, Chrome, Opera and also IE7+.
  - Probably It will never have most of the features that exist on the major
    frameworks.
  - Some code may not work "as is" since I'm constantly making changes on the
