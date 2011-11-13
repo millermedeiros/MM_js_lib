@@ -8,7 +8,7 @@ define(['exports', './vendorPrefix'], function (exports, vendorPrefix) {
      * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
      * https://gist.github.com/1002116
      * @author Miller Medeiros
-     * @version 0.1.0 (2011/11/13)
+     * @version 0.2.0 (2011/11/13)
      */
 
     var _win = window,
@@ -17,44 +17,52 @@ define(['exports', './vendorPrefix'], function (exports, vendorPrefix) {
         _supportRequestInterval = _reqAnim && _cancelAnim;
 
 
-    exports.requestAnimFrame = _reqAnim ? _win[_reqAnim] : function (callback, element) {
-                                _win.setTimeout(callback, 1000 / 60);
-                            };
+    /**
+     * requestAnimationFrame or fallback to setTimeout.
+     */
+    exports.requestAnimFrame = _reqAnim ?
+        function (fn) {
+            //chrome needs to run requestAnimationFrame on window context
+            //that's why we create a wrapper function...
+            return _win[_reqAnim](fn);
+        } :
+        function (fn) {
+            return _win.setTimeout(fn, 1000 / 60);
+        };
 
-    function getTime(){
-        return +(new Date());
-    }
 
-    exports.requestInterval = function (fn, delay) {
-
-        //Firefox 5 doesn't support cancelRequestAnimationFrame
-        if (! _supportRequestInterval) {
+    /**
+     * Similar to window.setInterval but uses requestAnimationFrame.
+     * @return {object|number} Reference to the interval, needed for clearing it.
+     */
+    exports.requestInterval = _supportRequestInterval ?
+        function (fn, delay) {
+            var startTime = +(new Date()),
+                //use object to store intervalId value since it's passed by reference
+                intervalId = {},
+                loop = function (timestamp) {
+                    intervalId.value = exports.requestAnimFrame(loop);
+                    if(timestamp - startTime >= delay) {
+                        fn.call();
+                        startTime = timestamp;
+                    }
+                };
+            intervalId.value = exports.requestAnimFrame(loop);
+            return intervalId;
+        } :
+        function (fn, delay) {
             return _win.setInterval(fn, delay);
-        }
+        };
 
-        var startTime = getTime(),
-            //use object to store value since it's passed by reference
-            intervalId = {};
-
-        function loop() {
-            if(getTime() - startTime >= delay) {
-                fn.call();
-                startTime = getTime();
-            }
-            intervalId.value = exports.requestAnimFrame.call(_win, loop);
-        }
-
-        //chrome needs to run requestAnimationFrame on window context
-        intervalId.value = exports.requestAnimFrame.call(_win, loop);
-        return intervalId;
-    };
-
-    exports.clearInterval = function (intervalId) {
-        if (_supportRequestInterval) {
+    /**
+     * Clear requestInterval.
+     */
+    exports.clearInterval = _supportRequestInterval ?
+        function (intervalId) {
             _win[_cancelAnim](intervalId.value);
-        } else {
-            clearInterval(intervalId);
-        }
-    };
+        } :
+        function (intervalId) {
+            _win.clearInterval(intervalId);
+        };
 
 });
