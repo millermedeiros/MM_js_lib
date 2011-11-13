@@ -1,10 +1,9 @@
 define([
        'amd-utils/string/pascalCase',
        'amd-utils/string/camelCase',
-       'amd-utils/string/hyphenate',
-       'amd-utils/string/unHyphenate'
+       'amd-utils/string/hyphenate'
     ],
-    function(pascalCase, camelCase, hyphenate, unHyphenate){
+    function(pascalCase, camelCase, hyphenate){
 
         var _domPrefixes = 'Webkit Moz O ms'.split(' '),
             _testEl = document.createElement('mmtest'), //avoid issues with query selector, html5 supports custom tags..
