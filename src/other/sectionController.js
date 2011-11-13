@@ -4,7 +4,7 @@
  * sections should implement `init(urlParamsArr)` method.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.5.1 (2011/11/12)
+ * @version 0.5.2 (2011/11/12)
  * @author Miller Medeiros
  */
 define(
@@ -122,7 +122,10 @@ define(
             _destParams = defaultParams.concat(params);
 
             _initializedChange.dispatch(sectionId, params);
-            _endedAndLoaded.removeAll();
+
+            //safe-guard against current changes
+            _endedAndLoaded.remove(initDestSection);
+            _loadedDestSection.remove(initDestSection);
             _endedAndLoaded.reset();
 
             if (destModuleId !== _destModuleId) {
