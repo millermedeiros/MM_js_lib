@@ -20,7 +20,7 @@ define([
          * Add browser specific prefixes based on feature detection.
          * methods will return `null` if property isn't supported.
          * @author Miller Medeiros
-         * @version 0.2.0 (2011/11/13)
+         * @version 0.2.1 (2011/11/13)
          */
         var vendorPrefix = {
 
@@ -64,7 +64,7 @@ define([
                 if(styleProp && styleProp.length === camelProp.length){
                     //no prefix
                     val = hyphenStyle;
-                } else if(styleProp && styleProp.length > prop.length){
+                } else if(styleProp && styleProp.length > camelProp.length){
                     // -ms-, -o-, -webkit-, -moz- follow same pattern..
                     val = '-'+ hyphenStyle;
                 }
