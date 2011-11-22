@@ -1,23 +1,22 @@
 /**
- * sectionController: load/init/end sections based on the hash change.
+ * sectionController: load/init/end sections based on routes change.
  * ---
  * sections should implement `init(urlParamsArr)` method.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.5.2 (2011/11/12)
+ * @version 0.6.0 (2011/11/22)
  * @author Miller Medeiros
  */
 define(
     [
         'require',
         'exports',
-        'hasher',
         'signals',
         'crossroads',
         'CompoundSignal',
         'amd-utils/string/makePath'
     ],
-    function (require, exports, hasher, signals, crossroads, CompoundSignal, makePath) {
+    function (require, exports, signals, crossroads, CompoundSignal, makePath) {
 
 
         var _initializedChange = new signals.Signal(),
@@ -61,10 +60,13 @@ define(
             }
             _sections = sections;
             setupRoutes();
-            hasher.initialized.add(onHasherInit);
-            hasher.changed.add(_router.parse, _router);
-            hasher.init();
+            exports._afterRoutesSetup();
         }
+
+        //make it easier to overwrite behavior
+        exports._afterRoutesSetup = function(){
+            exports.goTo(exports.DEFAULT_HASH);
+        };
 
         function setupRoutes() {
             _router.shoulTypecast = false;
@@ -81,14 +83,6 @@ define(
                 route.rules = sec.rules;
                 binding = route.matched.add(changeSection);
                 binding.params = [sec.id];
-            }
-        }
-
-        function onHasherInit(hash) {
-            if(! hash){
-                hasher.replaceHash(exports.DEFAULT_HASH || '');
-            } else {
-                _router.parse(hash);
             }
         }
 
@@ -194,7 +188,7 @@ define(
         }
 
         function goTo(paths) {
-            hasher.setHash.apply(hasher, arguments);
+            _router.parse( makePath.apply(null, arguments) );
         }
 
 
