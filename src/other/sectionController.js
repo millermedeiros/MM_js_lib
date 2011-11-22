@@ -4,7 +4,7 @@
  * sections should implement `init(urlParamsArr)` method.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.6.0 (2011/11/22)
+ * @version 0.6.1 (2011/11/22)
  * @author Miller Medeiros
  */
 define(
@@ -58,7 +58,7 @@ define(
             if (! sections) {
                 throw new Error('"sections" is a required argument.');
             }
-            _sections = sections;
+            _sections = exports._sections = sections;
             setupRoutes();
             exports._afterRoutesSetup();
         }
