@@ -1,10 +1,11 @@
 /**
  * sectionController: load/init/end sections based on routes change.
  * ---
- * sections should implement `init(urlParamsArr)` method.
+ * sections should implement `init(urlParamsArr)` method or be a constructor.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
+ * be sure to set `memorize = true` if section is a Constructor.
  * ---
- * @version 0.6.1 (2011/11/22)
+ * @version 0.7.0 (2011/11/24)
  * @author Miller Medeiros
  */
 define(
@@ -14,9 +15,10 @@ define(
         'signals',
         'crossroads',
         'CompoundSignal',
-        'amd-utils/string/makePath'
+        'amd-utils/string/makePath',
+        'amd-utils/lang/ctorApply'
     ],
-    function (require, exports, signals, crossroads, CompoundSignal, makePath) {
+    function (require, exports, signals, crossroads, CompoundSignal, makePath, ctorApply) {
 
 
         var _initializedChange = new signals.Signal(),
@@ -29,44 +31,18 @@ define(
         _endedAndLoaded.unique = false;
 
 
-        var _sections,
+        var _descriptor,
             _router = crossroads.create(),
             _prevUid,
             _destId,
             _destModuleId,
             _destParams,
-            _prevSection;
+            _prevSection,
+            _prevModule;
 
 
         // ---
 
-        /**
-         * @param {Array} sections Array with sections description.
-         * Available Section options:
-         *   - id:String => Used internally to get proper section.
-         *   - route:(String|RegExp) => See `crossroads.addRoute()` documentation.
-         *   - [params]:Array => SignalBinding.params.
-         *   - [rules]:Object => Route.rules.
-         *   - [moduleId]:String => Path to module. It will load the module at given path
-         *       if provided. Only use it if you wan't to override the normal
-         *       id-to-module path resolution. (useful when you want multiple routes to
-         *       load same module just passing different parameters)
-         *   - [isAsync]:Boolean => If section init() should NOT wait previous section
-         *       end(), it will override `sectionController.DEFAULT_ASYNC`.
-         */
-        function init(sections) {
-            if (! sections) {
-                throw new Error('"sections" is a required argument.');
-            }
-            _sections = exports._sections = sections;
-            setupRoutes();
-            exports._afterRoutesSetup();
-        }
-
-        //make it easier to overwrite behavior
-        exports._afterRoutesSetup = function(){
-            exports.goTo(exports.DEFAULT_HASH);
-        };
 
         function setupRoutes() {
             _router.shoulTypecast = false;
@@ -75,10 +51,10 @@ define(
                 return [vals.vals_];
             };
 
-            var n = _sections.length,
+            var n = _descriptor.length,
                 sec, route, binding;
 
-            while (sec = _sections[--n]) {
+            while (sec = _descriptor[--n]) {
                 route = _router.addRoute(sec.route);
                 route.rules = sec.rules;
                 binding = route.matched.add(changeSection);
@@ -86,10 +62,10 @@ define(
             }
         }
 
-        function getSectionById(id) {
-            var n = _sections.length,
+        function getSectionDescriptionById(id) {
+            var n = _descriptor.length,
                 sec;
-            while(sec = _sections[--n]){
+            while(sec = _descriptor[--n]){
                 if(sec.id === id) return sec;
             }
         }
@@ -109,26 +85,23 @@ define(
                 return;
             }
 
-            var destSection = getSectionById(sectionId),
-                defaultParams = destSection.params || [],
-                destModuleId = destSection.moduleId || makePath(exports.DEFAULT_PATH, sectionId, exports.DEFAULT_MODULE_NAME);
+            _initializedChange.dispatch(sectionId, params);
+
+            var destDescription = getSectionDescriptionById(sectionId),
+                defaultParams = destDescription.params || [],
+                destModuleId = destDescription.moduleId || makePath(exports.DEFAULT_PATH, sectionId, exports.DEFAULT_MODULE_NAME);
 
             _destParams = defaultParams.concat(params);
 
-            _initializedChange.dispatch(sectionId, params);
+            resetLoadState();
 
-            //safe-guard against current changes
-            _endedAndLoaded.remove(initDestSection);
-            _loadedDestSection.remove(initDestSection);
-            _endedAndLoaded.reset();
-
-            if (destModuleId !== _destModuleId) {
+            if (destModuleId !== _destModuleId || typeof _prevModule === 'function') {
+                // if it is a constructor it should always dispose previous
+                // section before creating a new instance to avoid conflicts.
                 _destId = sectionId;
                 _destModuleId = destModuleId;
 
-                var isAsync = 'isAsync' in destSection? destSection.isAsync : exports.DEFAULT_ASYNC;
-
-                if (isAsync) {
+                if ( isAsyncChange(destDescription) ) {
                     _loadedDestSection.addOnce(initDestSection);
                 } else {
                     _endedAndLoaded.addOnce(initDestSection);
@@ -146,6 +119,16 @@ define(
             loadSection(destModuleId);
         }
 
+        function resetLoadState() {
+            _endedAndLoaded.remove(initDestSection);
+            _loadedDestSection.remove(initDestSection);
+            _endedAndLoaded.reset();
+        }
+
+        function isAsyncChange(description) {
+            return 'isAsync' in description? description.isAsync : exports.DEFAULT_ASYNC;
+        }
+
         function loadSection(moduleId) {
             require([moduleId], function(){
                 //only dispatch if loaded section is same as destination
@@ -159,19 +142,39 @@ define(
             //module is already available since it was previously required by loadSection
             //better since it simplify logic and decouple methods
             var mod = require(_destModuleId),
-                initializedParams = [_destId, _destParams];
+                initializedParams = [_destId, _destParams],
+                section;
 
-            if (mod.initialized) {
-                var initializedBinding = mod.initialized.addOnce(_initializedDestSection.dispatch, _initializedDestSection);
+            if (typeof mod === 'function') {
+                //treat functions as constructors
+                section = ctorApply(mod, _destParams);
+                //if ctor can only listen for signal after instantiation so
+                //make sure to set `memorize = true`
+                listenInit(section, initializedParams);
+            } else {
+                section = mod;
+                listenInit(section, initializedParams);
+                section.init.apply(section, _destParams);
+            }
+            _prevSection = section;
+            _prevModule = mod;
+
+            _prevUid = uid(_destId, _destParams);
+        }
+
+        function listenInit(section, initializedParams) {
+            if (section.initialized) {
+                var initializedBinding = section.initialized.addOnce(_initializedDestSection.dispatch, _initializedDestSection);
                 initializedBinding.params = initializedParams;
+                // make sure to forget after first dispatch.. avoid issues with
+                // subsequent dispatches. (construtors should set
+                // `initialized.memorize = true` since signal will only be
+                // created during instantiation and it may be dispatched before
+                // listener is attached)
+                section.initialized.addOnce(section.initialized.forget, section.initialized);
             } else {
                 _initializedDestSection.dispatch.apply(_initializedDestSection, initializedParams);
             }
-
-            mod.init.apply(mod, _destParams);
-            _prevSection = mod;
-
-            _prevUid = uid(_destId, _destParams);
         }
 
         function endPrevSection() {
@@ -184,11 +187,7 @@ define(
             if (_prevSection && _prevSection.end) {
                 _prevSection.end();
             }
-            _prevSection = null;
-        }
-
-        function goTo(paths) {
-            _router.parse( makePath.apply(null, arguments) );
+            _prevSection = _prevModule = null;
         }
 
 
@@ -203,9 +202,9 @@ define(
         exports.DEFAULT_ASYNC = false;
 
         /**
-         * Default hash value, added to URL during init if no hash found.
+         * Default route.
          */
-        exports.DEFAULT_HASH = '';
+        exports.DEFAULT_ROUTE = '';
 
         /**
          * If section doesn't have a `moduleId` property it will load a module
@@ -216,8 +215,37 @@ define(
 
         // METHODS ---
 
-        exports.init = init;
-        exports.goTo = goTo;
+        /**
+         * @param {Array} descriptor Array with sections description.
+         * Available Section options:
+         *   - id:String => Used internally to get proper section.
+         *   - route:(String|RegExp) => See `crossroads.addRoute()` documentation.
+         *   - [params]:Array => SignalBinding.params.
+         *   - [rules]:Object => Route.rules.
+         *   - [moduleId]:String => Path to module. It will load the module at given path
+         *       if provided. Only use it if you wan't to override the normal
+         *       id-to-module path resolution. (useful when you want multiple routes to
+         *       load same module just passing different parameters)
+         *   - [isAsync]:Boolean => If section init() should NOT wait previous section
+         *       end(), it will override `sectionController.DEFAULT_ASYNC`.
+         */
+        exports.init = function (descriptor) {
+            if (! descriptor) {
+                throw new Error('"descriptor" is a required argument.');
+            }
+            _descriptor = descriptor;
+            setupRoutes();
+            exports._afterRoutesSetup();
+        };
+
+        //make it easier to overwrite behavior
+        exports._afterRoutesSetup = function () {
+            exports.goTo(exports.DEFAULT_ROUTE);
+        };
+
+        exports.goTo = function (paths) {
+            _router.parse( makePath.apply(null, arguments) );
+        };
 
         // SIGNALS ---
 

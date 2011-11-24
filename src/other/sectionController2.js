@@ -2,10 +2,10 @@
  * sectionController + Hasher
  * load/init/end sections based on the hash change.
  * ---
- * sections should implement `init(urlParamsArr)` method.
+ * sections should implement `init(urlParamsArr)` method or be a constructor.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.6.0 (2011/11/22)
+ * @version 0.6.1 (2011/11/42)
  * @author Miller Medeiros
  */
 define(
@@ -29,7 +29,7 @@ define(
 
         function onHasherInit(hash) {
             if(! hash){
-                hasher.replaceHash(exports.DEFAULT_HASH || '');
+                hasher.replaceHash(exports.DEFAULT_ROUTE || '');
             } else {
                 _router.parse(hash);
             }
