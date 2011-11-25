@@ -5,7 +5,7 @@
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * be sure to set `memorize = true` if section is a Constructor.
  * ---
- * @version 0.7.0 (2011/11/24)
+ * @version 0.7.1 (2011/11/25)
  * @author Miller Medeiros
  */
 define(
@@ -233,7 +233,7 @@ define(
             if (! descriptor) {
                 throw new Error('"descriptor" is a required argument.');
             }
-            _descriptor = descriptor;
+            _descriptor = exports._descriptor = descriptor;
             setupRoutes();
             exports._afterRoutesSetup();
         };
