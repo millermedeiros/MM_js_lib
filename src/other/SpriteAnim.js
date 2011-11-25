@@ -9,7 +9,7 @@ define(
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.3.0 (2011/11/12)
+         * @version 0.4.0 (2011/11/25)
          */
         function SpriteAnim (opts) {
 
@@ -33,7 +33,10 @@ define(
                 opts.container.appendChild( this._wrapper );
             }
 
-            this.updateRange(opts.startAt || 1, opts.endAt || opts.frames.length);
+            this._originalStartAt = opts.startAt || 1;
+            this._originalEndAt = opts.endAt || opts.frames.length;
+
+            this._resetRange();
         }
 
         SpriteAnim.basePath = '';
@@ -90,7 +93,7 @@ define(
                     } else if (this.playMode === SpriteAnim.LOOP) {
                         this.goTo( this._getFirstFrame() );
                     } else {
-                        this.stop();
+                        this.pause();
                     }
                 }
             },
@@ -99,12 +102,20 @@ define(
                 n = clamp(n, 1, this._frameCount);
                 if (n > this._curFrame) {
                     this._speed = 1;
-                    this.updateRange(this._curFrame, n);
+                    this._updateRange(this._curFrame, n);
                 } else {
                     this._speed = -1;
-                    this.updateRange(n, this._curFrame);
+                    this._updateRange(n, this._curFrame);
                 }
                 this.play();
+            },
+
+            playToFirst : function () {
+                this.playTo( this._originalStartAt );
+            },
+
+            playToLast : function () {
+                this.playTo( this._originalEndAt );
             },
 
             _isPlaying : false,
@@ -119,10 +130,14 @@ define(
                 return this._curFrame;
             },
 
-            updateRange : function (start, end) {
+            _updateRange : function (start, end) {
                 this._startAt = start;
                 this._endAt = end;
                 this.goTo( this._getFirstFrame() );
+            },
+
+            _resetRange : function () {
+                this._updateRange(this._originalStartAt, this._originalEndAt);
             },
 
             play : function () {
@@ -134,7 +149,7 @@ define(
                 }, 1000 / this._fps);
             },
 
-            stop : function () {
+            pause : function () {
                 if (! this._interval) return;
                 this._isPlaying = false;
                 animFrame.clearInterval(this._interval);
@@ -142,13 +157,15 @@ define(
             },
 
             restart : function () {
+                this._resetRange();
+                this._speed = 1;
                 this.goTo( this._getFirstFrame() );
                 this.play();
             },
 
             dispose : function () {
                 if (! this._wrapper) return;
-                this.stop();
+                this.pause();
                 var parent = this._wrapper.parentNode;
                 if (parent) {
                     parent.removeChild(this._wrapper);

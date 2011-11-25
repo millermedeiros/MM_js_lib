@@ -5,7 +5,7 @@
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * be sure to set `memorize = true` if section is a Constructor.
  * ---
- * @version 0.7.1 (2011/11/25)
+ * @version 0.8.0 (2011/11/25)
  * @author Miller Medeiros
  */
 define(
@@ -55,7 +55,7 @@ define(
                 sec, route, binding;
 
             while (sec = _descriptor[--n]) {
-                route = _router.addRoute(sec.route);
+                route = _router.addRoute(sec.route == null? sec.id : sec.route);
                 route.rules = sec.rules;
                 binding = route.matched.add(changeSection);
                 binding.params = [sec.id];
@@ -219,15 +219,16 @@ define(
          * @param {Array} descriptor Array with sections description.
          * Available Section options:
          *   - id:String => Used internally to get proper section.
-         *   - route:(String|RegExp) => See `crossroads.addRoute()` documentation.
-         *   - [params]:Array => SignalBinding.params.
-         *   - [rules]:Object => Route.rules.
-         *   - [moduleId]:String => Path to module. It will load the module at given path
-         *       if provided. Only use it if you wan't to override the normal
-         *       id-to-module path resolution. (useful when you want multiple routes to
-         *       load same module just passing different parameters)
-         *   - [isAsync]:Boolean => If section init() should NOT wait previous section
-         *       end(), it will override `sectionController.DEFAULT_ASYNC`.
+         *  - [route]:(String|RegExp) => See `crossroads.addRoute()` documentation.
+         *  - [params]:Array => Arguments passed to `section.init()` or `new
+         *  Section()` (if constructor) by default.
+         *  - [rules]:Object => Route.rules.
+         *  - [moduleId]:String => Path to module. It will load the module at given path
+         *    if provided. Only use it if you wan't to override the normal
+         *    id-to-module path resolution. (useful when you want multiple routes to
+         *    load same module just passing different parameters)
+         *  - [isAsync]:Boolean => If section init()/constructor should NOT wait
+         *  previous section end(), it will override `sectionController.DEFAULT_ASYNC`.
          */
         exports.init = function (descriptor) {
             if (! descriptor) {
