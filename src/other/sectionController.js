@@ -5,7 +5,7 @@
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * be sure to set `memorize = true` if section is a Constructor.
  * ---
- * @version 0.8.0 (2011/11/25)
+ * @version 0.9.0 (2011/11/26)
  * @author Miller Medeiros
  */
 define(
@@ -55,8 +55,9 @@ define(
                 sec, route, binding;
 
             while (sec = _descriptor[--n]) {
-                route = _router.addRoute(sec.route == null? sec.id : sec.route);
+                route = _router.addRoute(sec.route == null? sec.id : sec.route, null, sec.priority);
                 route.rules = sec.rules;
+                route.greedy = !!(sec.greedy);
                 binding = route.matched.add(changeSection);
                 binding.params = [sec.id];
             }
