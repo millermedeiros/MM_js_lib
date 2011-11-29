@@ -9,12 +9,11 @@ define(
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.4.0 (2011/11/25)
+         * @version 0.6.0 (2011/11/29)
          */
         function SpriteAnim (opts) {
 
             //frames is an array of objects {w,h,x,y,t,l}
-            //(wid, hei, x, y, top, left)
             this._frames = opts.frames;
             //original frame size {w,h}
             this._frameSize = opts.frameSize;
@@ -36,7 +35,10 @@ define(
             this._originalStartAt = opts.startAt || 1;
             this._originalEndAt = opts.endAt || opts.frames.length;
 
-            this._resetRange();
+            //array with cue points {start,end}
+            this._scenes = opts.scenes || [{start:opts.startAt, end:opts.endAt}];
+
+            this.restart();
         }
 
         SpriteAnim.basePath = '';
@@ -72,15 +74,19 @@ define(
             goTo : function (n) {
                 n = clamp(n, this._startAt, this._endAt);
 
-                var frame = this._frames[n - 1];
-                this._sprite.style.width = frame.w +'px';
-                this._sprite.style.height = frame.h +'px';
-                this._sprite.style.top = frame.t +'px';
-                this._sprite.style.left = frame.l +'px';
-                this._sprite.style.backgroundPosition = '-'+ frame.x +'px -'+ frame.y +'px';
+                var frame = this._frames[n - 1],
+                    spriteStyle = this._sprite.style;
+
+                spriteStyle.width = frame.w +'px';
+                spriteStyle.height = frame.h +'px';
+                spriteStyle.top = frame.t +'px';
+                spriteStyle.left = frame.l +'px';
+                spriteStyle.backgroundPosition = '-'+ frame.x +'px -'+ frame.y +'px';
 
                 this._curFrame = n;
             },
+
+            _speed : 1,
 
             _onTick : function(){
                 var n = toUInt( this._curFrame + this._speed );
@@ -102,10 +108,10 @@ define(
                 n = clamp(n, 1, this._frameCount);
                 if (n > this._curFrame) {
                     this._speed = 1;
-                    this._updateRange(this._curFrame, n);
+                    this._endAt = n;
                 } else {
                     this._speed = -1;
-                    this._updateRange(n, this._curFrame);
+                    this._startAt = n;
                 }
                 this.play();
             },
@@ -118,9 +124,10 @@ define(
                 this.playTo( this._originalEndAt );
             },
 
-            _isPlaying : false,
-
-            _speed : 1,
+            playToScene : function (idx) {
+                idx = clamp(idx || 0, 0, this._scenes.length - 1);
+                this.playTo( this._scenes[idx].end );
+            },
 
             _getFirstFrame : function () {
                 return this._speed > 0? this._startAt : this._endAt;
@@ -130,18 +137,20 @@ define(
                 return this._curFrame;
             },
 
-            _updateRange : function (start, end) {
-                this._startAt = start;
-                this._endAt = end;
-                this.goTo( this._getFirstFrame() );
+            _resetRange : function () {
+                this._startAt = this._originalStartAt;
+                this._endAt = this._originalEndAt;
             },
 
-            _resetRange : function () {
-                this._updateRange(this._originalStartAt, this._originalEndAt);
+            _isPlaying : false,
+
+            isPlaying : function () {
+                return _isPlaying;
             },
 
             play : function () {
                 if (this._interval) return;
+                this._resetRange();
                 this._isPlaying = true;
                 var self = this;
                 this._interval = animFrame.requestInterval(function(){
@@ -160,7 +169,6 @@ define(
                 this._resetRange();
                 this._speed = 1;
                 this.goTo( this._getFirstFrame() );
-                this.play();
             },
 
             dispose : function () {
