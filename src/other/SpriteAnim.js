@@ -10,7 +10,7 @@ define(
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.7.0 (2011/11/29)
+         * @version 0.7.1 (2011/11/29)
          */
         function SpriteAnim (opts) {
 
@@ -122,7 +122,7 @@ define(
                     this._speed = -1;
                     this._startAt = n;
                 }
-                this.play();
+                this._play();
             },
 
             playToFirst : function () {
@@ -158,8 +158,12 @@ define(
             },
 
             play : function () {
-                if (this._interval) return;
                 this._resetRange();
+                this._play();
+            },
+
+            _play : function () {
+                if (this._interval) return;
                 this._isPlaying = true;
                 var self = this;
                 this._interval = animFrame.requestInterval(function(){
