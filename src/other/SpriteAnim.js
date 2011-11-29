@@ -81,8 +81,12 @@ define(
             },
 
             goTo : function (n) {
-                n = clamp(n, this._startAt, this._endAt);
+                this._curFrame = clamp(n, this._startAt, this._endAt);
+                this._renderFrame(this._curFrame);
+                this.on.frame.dispatch(this._curFrame);
+            },
 
+            _renderFrame : function (n) {
                 var frame = this._frames[n - 1],
                     spriteStyle = this._sprite.style;
 
@@ -91,9 +95,6 @@ define(
                 spriteStyle.top = frame.t +'px';
                 spriteStyle.left = frame.l +'px';
                 spriteStyle.backgroundPosition = '-'+ frame.x +'px -'+ frame.y +'px';
-
-                this._curFrame = n;
-                this.on.frame.dispatch(n);
             },
 
             _speed : 1,
