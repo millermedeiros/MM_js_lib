@@ -10,7 +10,7 @@ define(
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.7.1 (2011/11/29)
+         * @version 0.7.2 (2011/11/29)
          */
         function SpriteAnim (opts) {
 
@@ -33,11 +33,12 @@ define(
                 opts.container.appendChild( this._wrapper );
             }
 
-            this._originalStartAt = opts.startAt || 1;
-            this._originalEndAt = opts.endAt || opts.frames.length;
+            this._startAt = opts.startAt || 1;
+            this._endAt = opts.endAt || opts.frames.length;
 
             //array with cue points {start,end}
-            this._scenes = opts.scenes || [{start:opts.startAt, end:opts.endAt}];
+            var self = this;
+            this._scenes = opts.scenes || [{start:self._startAt, end:self._endAt}];
 
             //events
             this.on = {
@@ -100,7 +101,7 @@ define(
             _onTick : function(){
                 var n = toUInt( this._curFrame + this._speed );
 
-                if (  (this._speed > 0 && n <= this._endAt) || (this._speed < 0 && n >= this._startAt) ) {
+                if (  (this._speed > 0 && n <= this._stopAt) || (this._speed < 0 && n >= this._stopAt) ) {
                     this.goTo(n);
                 } else {
                     if (this.playMode === SpriteAnim.ALTERNATE) {
@@ -114,23 +115,17 @@ define(
             },
 
             playTo : function (n) {
-                n = clamp(n, 1, this._frameCount);
-                if (n > this._curFrame) {
-                    this._speed = 1;
-                    this._endAt = n;
-                } else {
-                    this._speed = -1;
-                    this._startAt = n;
-                }
+                this._stopAt = clamp(n, 1, this._frameCount);
+                this._speed = (n > this._curFrame)? 1 : -1;
                 this._play();
             },
 
             playToFirst : function () {
-                this.playTo( this._originalStartAt );
+                this.playTo( this._startAt );
             },
 
             playToLast : function () {
-                this.playTo( this._originalEndAt );
+                this.playTo( this._endAt );
             },
 
             playToScene : function (idx) {
@@ -146,11 +141,6 @@ define(
                 return this._curFrame;
             },
 
-            _resetRange : function () {
-                this._startAt = this._originalStartAt;
-                this._endAt = this._originalEndAt;
-            },
-
             _isPlaying : false,
 
             isPlaying : function () {
@@ -158,7 +148,7 @@ define(
             },
 
             play : function () {
-                this._resetRange();
+                this._stopAt = this._endAt;
                 this._play();
             },
 
@@ -181,7 +171,7 @@ define(
             },
 
             restart : function () {
-                this._resetRange();
+                this._stopAt = this._endAt;
                 this._speed = 1;
                 this.goTo( this._getFirstFrame() );
             },
