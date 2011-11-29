@@ -1,15 +1,16 @@
 define(
     [
+        'signals',
         'amd-utils/math/clamp',
         'amd-utils/number/toUInt',
         '../browser/animFrame'
     ],
-    function (clamp, toUInt, animFrame) {
+    function (signals, clamp, toUInt, animFrame) {
 
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.6.0 (2011/11/29)
+         * @version 0.7.0 (2011/11/29)
          */
         function SpriteAnim (opts) {
 
@@ -37,6 +38,13 @@ define(
 
             //array with cue points {start,end}
             this._scenes = opts.scenes || [{start:opts.startAt, end:opts.endAt}];
+
+            //events
+            this.on = {
+                play : new signals.Signal(),
+                pause : new signals.Signal(),
+                frame : new signals.Signal()
+            };
 
             this.restart();
         }
@@ -84,6 +92,7 @@ define(
                 spriteStyle.backgroundPosition = '-'+ frame.x +'px -'+ frame.y +'px';
 
                 this._curFrame = n;
+                this.on.frame.dispatch(n);
             },
 
             _speed : 1,
@@ -156,6 +165,7 @@ define(
                 this._interval = animFrame.requestInterval(function(){
                     self._onTick();
                 }, 1000 / this._fps);
+                this.on.play.dispatch();
             },
 
             pause : function () {
@@ -163,6 +173,7 @@ define(
                 this._isPlaying = false;
                 animFrame.clearInterval(this._interval);
                 this._interval = null;
+                this.on.pause.dispatch();
             },
 
             restart : function () {
@@ -178,7 +189,11 @@ define(
                 if (parent) {
                     parent.removeChild(this._wrapper);
                 }
-                this._wrapper = this._sprite = null;
+                this._wrapper = this._sprite = this._scenes = null;
+                this.on.play.dispose();
+                this.on.pause.dispose();
+                this.on.frame.dispose();
+                delete this.on;
             }
 
         };
