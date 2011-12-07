@@ -20,7 +20,7 @@ define([
         /**
          * Scroll Pane - scrollable touch container
          * it will use CSS transforms if available or fallback to jQuery
-         * @version 0.3.0 (2011/10/26)
+         * @version 0.3.1 (2011/12/07)
          * @author Miller Medeiros
          */
         function ScrollPane(frameElm, contentHolder, numPanes){
@@ -72,7 +72,7 @@ define([
                 } else {
                     x = this._content.style.left;
                 }
-                this._touchStartX = parseInt(x, 10);
+                this._touchStartX = x? parseInt(x, 10) : 0; //parseInt('') === NaN
                 this.prevPane = this.currentPane;
             },
 

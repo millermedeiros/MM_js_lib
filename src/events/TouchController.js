@@ -14,6 +14,7 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
     }
 
     function normalizeEvent(evt){
+        evt = eventFacade.getEvent(evt);
         return _isTouch? evt.targetTouches[0] : evt;
     }
 
@@ -25,7 +26,7 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
 
     /**
      * Touch events abstraction
-     * @version 0.3.2 (2011/10/14)
+     * @version 0.3.3 (2011/12/07)
      * @author Miller Medeiros
      */
     function TouchController(targetElm){
@@ -74,6 +75,8 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
     }
 
     function _touchEndHandler(evt){
+        evt = eventFacade.getEvent(evt);
+
         var duration = getTime() - this._touchStartTime,
             momentum = {
                 x : this._changePos.x / duration,
