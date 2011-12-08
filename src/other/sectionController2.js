@@ -5,7 +5,7 @@
  * sections should implement `init(urlParamsArr)` method or be a constructor.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.6.1 (2011/11/42)
+ * @version 0.6.2 (2011/12/07)
  * @author Miller Medeiros
  */
 define(
@@ -18,12 +18,11 @@ define(
         //note that we are simply editing the sectionController object
         //since it "doesn't make sense" to have multiple section controllers...
 
-        var exports = sectionController,
-            _router = exports.router;
+        var exports = sectionController;
 
         exports._afterRoutesSetup = function () {
             hasher.initialized.add(onHasherInit);
-            hasher.changed.add(_router.parse, _router);
+            hasher.changed.add(exports.router.parse, exports.router);
             hasher.init();
         };
 
@@ -31,7 +30,7 @@ define(
             if(! hash){
                 hasher.replaceHash(exports.DEFAULT_ROUTE || '');
             } else {
-                _router.parse(hash);
+                exports.router.parse(hash);
             }
         }
 

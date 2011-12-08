@@ -1,11 +1,33 @@
 /**
  * sectionController: load/init/end sections based on routes change.
- * ---
- * sections should implement `init(urlParamsArr)` method or be a constructor.
- * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
- * be sure to set `memorize = true` if section is a Constructor.
- * ---
- * @version 0.9.0 (2011/11/26)
+ * ============================================================================
+ *
+ * sections should implement `init(urlParamsArr)` method or be a constructor
+ * `end()`, `ended:Signal`, `initialized:Signal` will be only used if
+ * available.  be sure to set `memorize = true` if section is a Constructor
+ *
+ * ============================================================================
+ *
+ * Sections are only loaded/initialized/ended if it matches a different route
+ * than the current one of if it captures different parameters. Multiple
+ * consecutive `goTo` passing  same value will have the same effect as calling
+ * it only once.
+ *
+ * Constructors
+ * ------------
+ * if module is a function it will be treated as a constructor. Notice that the
+ * constructor function will be called each time a new parameter matches the
+ * route and it will dispose previous object.
+ *
+ * Objects
+ * -------
+ * if module is an object it needs to implement the method `init()`.
+ * `init()` will get called multiple times if matching same route passing
+ * different parameters..
+ *
+ * ============================================================================
+ *
+ * @version 0.9.1 (2011/12/08)
  * @author Miller Medeiros
  */
 define(
@@ -20,7 +42,6 @@ define(
     ],
     function (require, exports, signals, crossroads, CompoundSignal, makePath, ctorApply) {
 
-
         var _initializedChange = new signals.Signal(),
             _endedPrevSection = new signals.Signal(),
             _loadedDestSection = new signals.Signal(),
@@ -32,7 +53,6 @@ define(
 
 
         var _descriptor,
-            _router = crossroads.create(),
             _prevUid,
             _destId,
             _destModuleId,
@@ -45,17 +65,12 @@ define(
 
 
         function setupRoutes() {
-            _router.shoulTypecast = false;
-            _router.normalizeFn = function (req, vals) {
-                //will dispatch a single parameter (Array) with all the values.
-                return [vals.vals_];
-            };
 
             var n = _descriptor.length,
                 sec, route, binding;
 
             while (sec = _descriptor[--n]) {
-                route = _router.addRoute(sec.route == null? sec.id : sec.route, null, sec.priority);
+                route = exports.router.addRoute(sec.route == null? sec.id : sec.route, null, sec.priority);
                 route.rules = sec.rules;
                 route.greedy = !!(sec.greedy);
                 binding = route.matched.add(changeSection);
@@ -199,6 +214,7 @@ define(
         /**
          * If `true` it will NOT wait the previous section to end before
          * starting the next one.
+         * It will be overwritten by the section descriptor.
          */
         exports.DEFAULT_ASYNC = false;
 
@@ -218,18 +234,29 @@ define(
 
         /**
          * @param {Array} descriptor Array with sections description.
-         * Available Section options:
-         *   - id:String => Used internally to get proper section.
-         *  - [route]:(String|RegExp) => See `crossroads.addRoute()` documentation.
-         *  - [params]:Array => Arguments passed to `section.init()` or `new
-         *  Section()` (if constructor) by default.
-         *  - [rules]:Object => Route.rules.
-         *  - [moduleId]:String => Path to module. It will load the module at given path
-         *    if provided. Only use it if you wan't to override the normal
-         *    id-to-module path resolution. (useful when you want multiple routes to
-         *    load same module just passing different parameters)
-         *  - [isAsync]:Boolean => If section init()/constructor should NOT wait
-         *  previous section end(), it will override `sectionController.DEFAULT_ASYNC`.
+         * Options
+         * -------
+         * - id:String => Used internally to get proper section or as a route
+         *   (if route is the same as ID)
+         * - [params]:Array => Arguments passed to `section.init()` or `new
+         *   Section()` by default
+         *
+         * Route related:
+         * - [route]:(String|RegExp) => See `crossroads.addRoute()` documentation.
+         *   sectionController will use "id" as route if not present.
+         * - [rules]:Object => see crossroads Route.rules.
+         * - [priority]:Number => Route priority (see `crossroads.addRoute`).
+         * - [greedy]:Boolean => crossroads Route.greedy.
+         *
+         * Behavior:
+         * - [moduleId]:String => Path to module. It will load the module at
+         *   given path if provided. Only use it if you want to override the
+         *   normal id-to-module path resolution. (useful when you want
+         *   multiple routes to load same module just passing different
+         *   parameters)
+         * - [isAsync]:Boolean => If section init()/constructor should NOT wait
+         *   previous section end(), it will override
+         *   `sectionController.DEFAULT_ASYNC`
          */
         exports.init = function (descriptor) {
             if (! descriptor) {
@@ -246,7 +273,7 @@ define(
         };
 
         exports.goTo = function (paths) {
-            _router.parse( makePath.apply(null, arguments) );
+            exports.router.parse( makePath.apply(null, arguments) );
         };
 
         // SIGNALS ---
@@ -257,7 +284,12 @@ define(
 
         // OTHER ---
 
-        exports.router = _router;
+        exports.router = crossroads.create();
+        exports.router.shoulTypecast = false;
+        exports.router.normalizeFn = function (req, vals) {
+            //will dispatch a single parameter (Array) with all the values.
+            return [vals.vals_];
+        };
 
     }
 );

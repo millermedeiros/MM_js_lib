@@ -10,7 +10,7 @@ define(
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.7.2 (2011/11/29)
+         * @version 0.8.3 (2011/12/08)
          */
         function SpriteAnim (opts) {
 
@@ -38,7 +38,7 @@ define(
 
             //array with cue points {start,end}
             var self = this;
-            this._scenes = opts.scenes || [{start:self._startAt, end:self._endAt}];
+            this.scenes = opts.scenes || [{start:self._startAt, end:self._endAt}];
 
             //events
             this.on = {
@@ -48,6 +48,9 @@ define(
             };
 
             this.restart();
+            if (opts.autoPlay) {
+                this.play();
+            }
         }
 
         SpriteAnim.basePath = '';
@@ -129,33 +132,63 @@ define(
                 this.playTo( this._endAt );
             },
 
-            playToScene : function (idx) {
-                idx = clamp(idx || 0, 0, this._scenes.length - 1);
-                this.playTo( this._scenes[idx].end );
+            // ---
+
+            // XXX: maybe split the Scene logic into a separate class..
+            _getScene : function (idx) {
+                return this.scenes[clamp(idx || 0, 0, this.scenes.length - 1)];
             },
+
+            _sceneAction : function(idx, actionName, pos) {
+                this[actionName]( this._getScene(idx)[pos] );
+            },
+
+            playToSceneStart : function (idx) {
+                this._sceneAction(idx, 'playTo', 'start');
+            },
+
+            playToSceneEnd : function (idx) {
+                this._sceneAction(idx, 'playTo', 'end');
+            },
+
+            goToSceneStart : function (idx) {
+                this._sceneAction(idx, 'goTo', 'start');
+            },
+
+            goToSceneEnd : function (idx) {
+                this._sceneAction(idx, 'goTo', 'end');
+            },
+
+            playScene : function(idx) {
+                this.goToSceneStart(idx);
+                this.playToSceneEnd(idx);
+            },
+
+            // ---
 
             _getFirstFrame : function () {
                 return this._speed > 0? this._startAt : this._endAt;
+            },
+
+            _getLastFrame : function () {
+                return this._speed < 0? this._startAt : this._endAt;
             },
 
             getCurrentFrame : function () {
                 return this._curFrame;
             },
 
-            _isPlaying : false,
-
             isPlaying : function () {
-                return _isPlaying;
+                return !!this._interval;
             },
 
             play : function () {
-                this._stopAt = this._endAt;
+                this._stopAt = this._getLastFrame();
                 this._play();
             },
 
             _play : function () {
                 if (this._interval) return;
-                this._isPlaying = true;
                 var self = this;
                 this._interval = animFrame.requestInterval(function(){
                     self._onTick();
@@ -164,11 +197,16 @@ define(
             },
 
             pause : function () {
+                if (this._interval) {
+                    this._clearInterval();
+                    this.on.pause.dispatch();
+                }
+            },
+
+            _clearInterval : function () {
                 if (! this._interval) return;
-                this._isPlaying = false;
                 animFrame.clearInterval(this._interval);
                 this._interval = null;
-                this.on.pause.dispatch();
             },
 
             restart : function () {
@@ -179,16 +217,23 @@ define(
 
             dispose : function () {
                 if (! this._wrapper) return;
-                this.pause();
+
+                //not calling pause() since it dispatches signal which may
+                //throw errors if user have multiple play/goTo calls chained
+                //together by listening to on.pause signal
+                this._clearInterval();
+
                 var parent = this._wrapper.parentNode;
                 if (parent) {
                     parent.removeChild(this._wrapper);
                 }
-                this._wrapper = this._sprite = this._scenes = null;
+
                 this.on.play.dispose();
                 this.on.pause.dispose();
                 this.on.frame.dispose();
                 delete this.on;
+
+                this._wrapper = this._sprite = this.scenes = null;
             }
 
         };
