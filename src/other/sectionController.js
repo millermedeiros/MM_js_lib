@@ -27,7 +27,7 @@
  *
  * ============================================================================
  *
- * @version 0.9.1 (2011/12/08)
+ * @version 0.10.0 (2011/12/16)
  * @author Miller Medeiros
  */
 define(
@@ -42,172 +42,17 @@ define(
     ],
     function (require, exports, signals, crossroads, CompoundSignal, makePath, ctorApply) {
 
-        var _initializedChange = new signals.Signal(),
-            _endedPrevSection = new signals.Signal(),
-            _loadedDestSection = new signals.Signal(),
-            _endedAndLoaded = new CompoundSignal(_endedPrevSection, _loadedDestSection),
-            _initializedDestSection = new signals.Signal();
+        // SIGNALS ---
 
-        _endedAndLoaded.memorize = false;
-        _endedAndLoaded.unique = false;
+        exports.initializedChange = new signals.Signal();
+        exports.endedPrevSection = new signals.Signal();
+        exports._loadedDestSection = new signals.Signal();
+        exports._endedAndLoaded = new CompoundSignal(exports.endedPrevSection, exports._loadedDestSection);
+        exports.initializedDestSection = new signals.Signal();
 
+        exports._endedAndLoaded.memorize = false;
+        exports._endedAndLoaded.unique = false;
 
-        var _descriptor,
-            _prevUid,
-            _destId,
-            _destModuleId,
-            _destParams,
-            _prevSection,
-            _prevModule;
-
-
-        // ---
-
-
-        function setupRoutes() {
-
-            var n = _descriptor.length,
-                sec, route, binding;
-
-            while (sec = _descriptor[--n]) {
-                route = exports.router.addRoute(sec.route == null? sec.id : sec.route, null, sec.priority);
-                route.rules = sec.rules;
-                route.greedy = !!(sec.greedy);
-                binding = route.matched.add(changeSection);
-                binding.params = [sec.id];
-            }
-        }
-
-        function getSectionDescriptionById(id) {
-            var n = _descriptor.length,
-                sec;
-            while(sec = _descriptor[--n]){
-                if(sec.id === id) return sec;
-            }
-        }
-
-        function uid(sectionId, params) {
-            return sectionId + ((params && params.length)? '-'+ params.join('-') : '');
-        }
-
-        /**
-         * @private
-         * @param {string} sectionId Path to section
-         * @param {array} params Params that will be passed to constructor
-         */
-        function changeSection(sectionId, params) {
-
-            if (_prevUid === uid(sectionId, params)) {
-                return;
-            }
-
-            _initializedChange.dispatch(sectionId, params);
-
-            var destDescription = getSectionDescriptionById(sectionId),
-                defaultParams = destDescription.params || [],
-                destModuleId = destDescription.moduleId || makePath(exports.DEFAULT_PATH, sectionId, exports.DEFAULT_MODULE_NAME);
-
-            _destParams = defaultParams.concat(params);
-
-            resetLoadState();
-
-            if (destModuleId !== _destModuleId || typeof _prevModule === 'function') {
-                // if it is a constructor it should always dispose previous
-                // section before creating a new instance to avoid conflicts.
-                _destId = sectionId;
-                _destModuleId = destModuleId;
-
-                if ( isAsyncChange(destDescription) ) {
-                    _loadedDestSection.addOnce(initDestSection);
-                } else {
-                    _endedAndLoaded.addOnce(initDestSection);
-                }
-
-                endPrevSection();
-
-            } else {
-                // in case destSection didn't finished loading yet or it is
-                // trying to load the same main module e.g. sub-section logic
-                // is handled by `init()` by passing different params.
-                _loadedDestSection.addOnce(initDestSection);
-            }
-
-            loadSection(destModuleId);
-        }
-
-        function resetLoadState() {
-            _endedAndLoaded.remove(initDestSection);
-            _loadedDestSection.remove(initDestSection);
-            _endedAndLoaded.reset();
-        }
-
-        function isAsyncChange(description) {
-            return 'isAsync' in description? description.isAsync : exports.DEFAULT_ASYNC;
-        }
-
-        function loadSection(moduleId) {
-            require([moduleId], function(){
-                //only dispatch if loaded section is same as destination
-                if(moduleId === _destModuleId){
-                    _loadedDestSection.dispatch();
-                }
-            });
-        }
-
-        function initDestSection() {
-            //module is already available since it was previously required by loadSection
-            //better since it simplify logic and decouple methods
-            var mod = require(_destModuleId),
-                initializedParams = [_destId, _destParams],
-                section;
-
-            if (typeof mod === 'function') {
-                //treat functions as constructors
-                section = ctorApply(mod, _destParams);
-                //if ctor can only listen for signal after instantiation so
-                //make sure to set `memorize = true`
-                listenInit(section, initializedParams);
-            } else {
-                section = mod;
-                listenInit(section, initializedParams);
-                section.init.apply(section, _destParams);
-            }
-            _prevSection = section;
-            _prevModule = mod;
-
-            _prevUid = uid(_destId, _destParams);
-        }
-
-        function listenInit(section, initializedParams) {
-            if (section.initialized) {
-                var initializedBinding = section.initialized.addOnce(_initializedDestSection.dispatch, _initializedDestSection);
-                initializedBinding.params = initializedParams;
-                // make sure to forget after first dispatch.. avoid issues with
-                // subsequent dispatches. (construtors should set
-                // `initialized.memorize = true` since signal will only be
-                // created during instantiation and it may be dispatched before
-                // listener is attached)
-                section.initialized.addOnce(section.initialized.forget, section.initialized);
-            } else {
-                _initializedDestSection.dispatch.apply(_initializedDestSection, initializedParams);
-            }
-        }
-
-        function endPrevSection() {
-            if (_prevSection && _prevSection.ended) {
-                _prevSection.ended.addOnce(_endedPrevSection.dispatch, _endedPrevSection);
-            } else {
-                //ensure it will always dispatch signal
-                _endedPrevSection.dispatch();
-            }
-            if (_prevSection && _prevSection.end) {
-                _prevSection.end();
-            }
-            _prevSection = _prevModule = null;
-        }
-
-
-        // API ===================
 
         // SETTINGS ---
 
@@ -230,7 +75,8 @@ define(
         exports.DEFAULT_PATH = 'sections';
         exports.DEFAULT_MODULE_NAME = 'main';
 
-        // METHODS ---
+
+        // OTHER ----
 
         /**
          * @param {Array} descriptor Array with sections description.
@@ -262,33 +108,171 @@ define(
             if (! descriptor) {
                 throw new Error('"descriptor" is a required argument.');
             }
-            _descriptor = exports._descriptor = descriptor;
-            setupRoutes();
-            exports._afterRoutesSetup();
+            this._descriptor = descriptor;
+            this._setupRoutes();
+            this._afterRoutesSetup();
         };
 
         //make it easier to overwrite behavior
         exports._afterRoutesSetup = function () {
-            exports.goTo(exports.DEFAULT_ROUTE);
+            this.goTo(this.DEFAULT_ROUTE);
         };
 
         exports.goTo = function (paths) {
-            exports.router.parse( makePath.apply(null, arguments) );
+            this.router.parse( makePath.apply(null, arguments) );
         };
 
-        // SIGNALS ---
-
-        exports.initializedChange = _initializedChange;
-        exports.endedPrevSection = _endedPrevSection;
-        exports.initializedDestSection = _initializedDestSection;
-
-        // OTHER ---
 
         exports.router = crossroads.create();
         exports.router.shoulTypecast = false;
         exports.router.normalizeFn = function (req, vals) {
             //will dispatch a single parameter (Array) with all the values.
             return [vals.vals_];
+        };
+
+        // ---
+
+
+        exports._setupRoutes = function () {
+
+            var n = this._descriptor.length,
+                sec, route, binding;
+
+            while (sec = this._descriptor[--n]) {
+                route = this.router.addRoute(sec.route == null? sec.id : sec.route, null, sec.priority);
+                route.rules = sec.rules;
+                route.greedy = !!(sec.greedy);
+                binding = route.matched.add(this._changeSection, this);
+                binding.params = [sec.id];
+            }
+        };
+
+        exports._getSectionDescriptionById = function(id) {
+            var n = this._descriptor.length,
+                sec;
+            while(sec = this._descriptor[--n]){
+                if(sec.id === id) return sec;
+            }
+        };
+
+        exports._uid = function(sectionId, params) {
+            return sectionId + ((params && params.length)? '-'+ params.join('-') : '');
+        };
+
+        /**
+         * @private
+         * @param {string} sectionId Path to section
+         * @param {array} params Params that will be passed to constructor
+         */
+        exports._changeSection = function (sectionId, params) {
+
+            if (this._prevUid === this._uid(sectionId, params)) {
+                return;
+            }
+
+            this.initializedChange.dispatch(sectionId, params);
+
+            var destDescription = this._getSectionDescriptionById(sectionId),
+                defaultParams = destDescription.params || [],
+                destModuleId = destDescription.moduleId || makePath(this.DEFAULT_PATH, sectionId, this.DEFAULT_MODULE_NAME);
+
+            this._destParams = defaultParams.concat(params);
+
+            this._resetLoadState();
+
+            if (destModuleId !== this._destModuleId || typeof this._prevModule === 'function') {
+                // if it is a constructor it should always dispose previous
+                // section before creating a new instance to avoid conflicts.
+                this._destId = sectionId;
+                this._destModuleId = destModuleId;
+
+                if ( this._isAsyncChange(destDescription) ) {
+                    this._loadedDestSection.addOnce(this._initDestSection, this);
+                } else {
+                    this._endedAndLoaded.addOnce(this._initDestSection, this);
+                }
+
+                this._endPrevSection();
+
+            } else {
+                // in case destSection didn't finished loading yet or it is
+                // trying to load the same main module e.g. sub-section logic
+                // is handled by `init()` by passing different params.
+                this._loadedDestSection.addOnce(this._initDestSection, this);
+            }
+
+            this._loadSection(destModuleId);
+        };
+
+        exports._resetLoadState = function() {
+            this._endedAndLoaded.remove(this._initDestSection);
+            this._loadedDestSection.remove(this._initDestSection);
+            this._endedAndLoaded.reset();
+        };
+
+        exports._isAsyncChange = function (description) {
+            return 'isAsync' in description? description.isAsync : this.DEFAULT_ASYNC;
+        };
+
+        exports._loadSection = function (moduleId) {
+            require([moduleId], function(){
+                //only dispatch if loaded section is same as destination
+                if(moduleId === exports._destModuleId){
+                    exports._loadedDestSection.dispatch();
+                }
+            });
+        };
+
+        exports._initDestSection = function () {
+            //module is already available since it was previously required by loadSection
+            //better since it simplify logic and decouple methods
+            var mod = require(this._destModuleId),
+                initializedParams = [this._destId, this._destParams],
+                section;
+
+            if (typeof mod === 'function') {
+                //treat functions as constructors
+                section = ctorApply(mod, this._destParams);
+                //if ctor can only listen for signal after instantiation so
+                //make sure to set `memorize = true`
+                this._listenInit(section, initializedParams);
+            } else {
+                section = mod;
+                this._listenInit(section, initializedParams);
+                section.init.apply(section, this._destParams);
+            }
+            this._prevSection = section;
+            this._prevModule = mod;
+
+            this._prevUid = this._uid(this._destId, this._destParams);
+        };
+
+        exports._listenInit = function(section, initializedParams) {
+            if (section.initialized) {
+                var initializedBinding = section.initialized.addOnce(this.initializedDestSection.dispatch, this.initializedDestSection);
+                initializedBinding.params = initializedParams;
+                // make sure to forget after first dispatch.. avoid issues with
+                // subsequent dispatches. (construtors should set
+                // `initialized.memorize = true` since signal will only be
+                // created during instantiation and it may be dispatched before
+                // listener is attached)
+                section.initialized.addOnce(section.initialized.forget, section.initialized);
+            } else {
+                this.initializedDestSection.dispatch.apply(this.initializedDestSection, initializedParams);
+            }
+        };
+
+        exports._endPrevSection = function () {
+            if (this._prevSection && this._prevSection.ended) {
+                this._prevSection.ended.addOnce(this.endedPrevSection.dispatch, this.endedPrevSection);
+            } else {
+                //ensure it will always dispatch signal
+                this.endedPrevSection.dispatch();
+            }
+            if (this._prevSection && this._prevSection.end) {
+                this._prevSection.end();
+            }
+            this._prevSection = this._prevModule = this._prevUid = null;
         };
 
     }
