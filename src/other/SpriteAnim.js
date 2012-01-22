@@ -10,7 +10,7 @@ define(
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.8.3 (2011/12/08)
+         * @version 0.9.2 (2012/01/19)
          */
         function SpriteAnim (opts) {
 
@@ -19,7 +19,7 @@ define(
             //original frame size {w,h}
             this._frameSize = opts.frameSize;
 
-            this._fps = opts.fps || 12;
+            this._fps = opts.fps || SpriteAnim.defaultFps;
             this.playMode = opts.playMode || SpriteAnim.NORMAL;
 
             this._createElements();
@@ -37,8 +37,7 @@ define(
             this._endAt = opts.endAt || opts.frames.length;
 
             //array with cue points {start,end}
-            var self = this;
-            this.scenes = opts.scenes || [{start:self._startAt, end:self._endAt}];
+            this.cuePoints = opts.cuePoints;
 
             //events
             this.on = {
@@ -53,6 +52,7 @@ define(
             }
         }
 
+        SpriteAnim.defaultFps = 12;
         SpriteAnim.basePath = '';
 
         //playMode
@@ -84,7 +84,7 @@ define(
             },
 
             goTo : function (n) {
-                this._curFrame = clamp(n, this._startAt, this._endAt);
+                this._curFrame = clamp(n || this._startAt, this._startAt, this._endAt);
                 this._renderFrame(this._curFrame);
                 this.on.frame.dispatch(this._curFrame);
             },
@@ -119,7 +119,7 @@ define(
             },
 
             playTo : function (n) {
-                this._stopAt = clamp(n, 1, this._frameCount);
+                this._stopAt = clamp(n || 1, 1, this._frameCount);
                 this._speed = (n > this._curFrame)? 1 : -1;
                 this._play();
             },
@@ -134,29 +134,30 @@ define(
 
             // ---
 
-            // XXX: maybe split the Scene logic into a separate class..
-            _getScene : function (idx) {
-                return this.scenes[clamp(idx || 0, 0, this.scenes.length - 1)];
+            _getSceneEnd : function (idx) {
+                if (! this.cuePoints) return this._endAt;
+                return this.cuePoints[idx];
             },
 
-            _sceneAction : function(idx, actionName, pos) {
-                this[actionName]( this._getScene(idx)[pos] );
+            _getSceneStart : function (idx) {
+                if (! this.cuePoints) return this._startAt;
+                return (idx === 0)? 1 : this.cuePoints[idx - 1] + 1;
             },
 
             playToSceneStart : function (idx) {
-                this._sceneAction(idx, 'playTo', 'start');
+                this.playTo(this._getSceneStart(idx));
             },
 
             playToSceneEnd : function (idx) {
-                this._sceneAction(idx, 'playTo', 'end');
+                this.playTo(this._getSceneEnd(idx));
             },
 
             goToSceneStart : function (idx) {
-                this._sceneAction(idx, 'goTo', 'start');
+                this.goTo(this._getSceneStart(idx));
             },
 
             goToSceneEnd : function (idx) {
-                this._sceneAction(idx, 'goTo', 'end');
+                this.goTo(this._getSceneEnd(idx));
             },
 
             playScene : function(idx) {
@@ -199,7 +200,7 @@ define(
             pause : function () {
                 if (this._interval) {
                     this._clearInterval();
-                    this.on.pause.dispatch();
+                    this.on.pause.dispatch(this._curFrame);
                 }
             },
 
@@ -233,7 +234,7 @@ define(
                 this.on.frame.dispose();
                 delete this.on;
 
-                this._wrapper = this._sprite = this.scenes = null;
+                this._wrapper = this._sprite = this.cuePoints = null;
             }
 
         };
