@@ -6,7 +6,7 @@ define([
     function(pascalCase, camelCase, hyphenate){
 
         var _domPrefixes = 'Webkit Moz O ms'.split(' '),
-            _testEl = document.createElement('mmtest'), //avoid issues with query selector, html5 supports custom tags..
+            _testEl = document.createElement('div'),
             _testStyle = _testEl.style,
             _prevPrefix;
 
@@ -19,7 +19,7 @@ define([
          * Add browser specific prefixes based on feature detection.
          * methods will return `null` if property isn't supported.
          * @author Miller Medeiros
-         * @version 0.2.1 (2011/11/13)
+         * @version 0.2.2 (2012/02/17)
          */
         var vendorPrefix = {
 
