@@ -46,6 +46,30 @@ define(['src/other/LinkedList'], function (LinkedList) {
                 expect(items2).toEqual(items);
             });
 
+            it('insert shouldn\'t break iterator', function () {
+                var ll = new LinkedList();
+                ll.append('lorem');
+                ll.append('ipsum');
+                ll.append('dolor');
+                ll.insert('foo', function(){
+                    return false;
+                });
+                ll.insert('bar', function(){
+                    return true;
+                });
+                var items = [];
+                while (ll.hasNext()) {
+                    items.push(ll.next());
+                }
+                expect(items).toEqual(['bar', 'lorem', 'ipsum', 'dolor', 'foo']);
+                var items2 = [];
+                ll.rewind();
+                while (ll.hasNext()) {
+                    items2.push(ll.next());
+                }
+                expect(items2).toEqual(items);
+            });
+
         });
 
         describe('remove/insert', function () {

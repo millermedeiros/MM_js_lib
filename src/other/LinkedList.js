@@ -3,7 +3,7 @@ define(function () {
     /**
      * Fast LinkedList implementation
      * @author Miller Medeiros
-     * @version 0.1.0 (2012/03/07)
+     * @version 0.1.1 (2012/03/07)
      */
     function LinkedList(){
         this._head = null;
@@ -66,7 +66,12 @@ define(function () {
             while (cur){
                 if (compareFn(cur.data, data)) {
                     item = {data: data, next: cur};
-                    prev.next = item;
+                    if (cur !== prev) {
+                        //safe-guard against cross-references
+                        prev.next = item;
+                    } else {
+                        this._head = item;
+                    }
                     this._length++;
                     return true;
                 }
