@@ -5,7 +5,7 @@ define(['signals'], function (signals) {
      * JS-Signals wrapper to convert it into a regular Event Emitter, which can
      * lister/dispatch arbitrary events.
      * @author Miller Medeiros
-     * @version 0.1.0 (2012/01/16)
+     * @version 0.1.1 (2012/01/23)
      * @license WTFPL
      */
     function SignalEmitter(){
@@ -34,7 +34,11 @@ define(['signals'], function (signals) {
         dispatch : function(id, args) {
             var sig = this._signals[id];
             if (! sig) return;
-            sig.dispatch.apply(sig, args);
+            if (args) {
+                sig.dispatch.apply(sig, args);
+            } else {
+                sig.dispatch();
+            }
         }
 
     };
