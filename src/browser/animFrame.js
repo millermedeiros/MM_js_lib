@@ -8,13 +8,17 @@ define(['exports', './vendorPrefix'], function (exports, vendorPrefix) {
      * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
      * https://gist.github.com/1002116
      * @author Miller Medeiros
-     * @version 0.2.0 (2011/11/13)
+     * @version 0.2.1 (2012/03/21)
      */
 
     var _win = window,
         _reqAnim = vendorPrefix.dom('requestAnimationFrame', _win),
         _cancelAnim = vendorPrefix.dom('cancelRequestAnimationFrame', _win),
-        _supportRequestInterval = _reqAnim && _cancelAnim;
+        _supportRequestInterval = _reqAnim && _cancelAnim,
+        // Date.now() generates less garbage and is potentially faster
+        _now = 'now' in Date? Date.now : function(){
+            return +(new Date());
+        };
 
 
     /**
@@ -37,7 +41,7 @@ define(['exports', './vendorPrefix'], function (exports, vendorPrefix) {
      */
     exports.requestInterval = _supportRequestInterval ?
         function (fn, delay) {
-            var startTime = +(new Date()),
+            var startTime = _now(),
                 //use object to store intervalId value since it's passed by reference
                 intervalId = {},
                 loop = function (timestamp) {

@@ -2,15 +2,14 @@ define(
     [
         'signals',
         'amd-utils/math/clamp',
-        'amd-utils/number/toUInt',
         '../browser/animFrame'
     ],
-    function (signals, clamp, toUInt, animFrame) {
+    function (signals, clamp, animFrame) {
 
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.9.2 (2012/01/19)
+         * @version 0.9.3 (2012/03/21)
          */
         function SpriteAnim (opts) {
 
@@ -25,7 +24,8 @@ define(
             this._createElements();
 
             var basePath = 'basePath' in opts? opts.basePath : SpriteAnim.basePath,
-                sheetUrl =  basePath? (basePath +'/'+ opts.spriteSheet).replace(/\/+/, '/') : opts.spriteSheet;
+                sheetUrl =  basePath? (basePath +'/'+ opts.spriteSheet).replace(/\/+/, '/') : opts.spriteSheet,
+                self = this;
 
             this._sprite.style.background = 'url('+ sheetUrl +') no-repeat';
 
@@ -44,6 +44,11 @@ define(
                 play : new signals.Signal(),
                 pause : new signals.Signal(),
                 frame : new signals.Signal()
+            };
+
+            // avoids creating a new function at each play/stop
+            this._boundTick = function(){
+                self._onTick();
             };
 
             this.restart();
@@ -103,7 +108,7 @@ define(
             _speed : 1,
 
             _onTick : function(){
-                var n = toUInt( this._curFrame + this._speed );
+                var n = (this._curFrame + this._speed) >>> 0; //toUint
 
                 if (  (this._speed > 0 && n <= this._stopAt) || (this._speed < 0 && n >= this._stopAt) ) {
                     this.goTo(n);
@@ -190,10 +195,7 @@ define(
 
             _play : function () {
                 if (this._interval) return;
-                var self = this;
-                this._interval = animFrame.requestInterval(function(){
-                    self._onTick();
-                }, 1000 / this._fps);
+                this._interval = animFrame.requestInterval(this._boundTick, 1000 / this._fps);
                 this.on.play.dispatch();
             },
 
