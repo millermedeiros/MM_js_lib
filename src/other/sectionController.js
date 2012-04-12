@@ -27,7 +27,7 @@
  *
  * ============================================================================
  *
- * @version 0.11.0 (2012/02/03)
+ * @version 0.11.1 (2012/04/12)
  * @author Miller Medeiros
  */
 define(
@@ -263,13 +263,14 @@ define(
         };
 
         exports._endPrevSection = function () {
-            if (this._prevSection) {
+            if (this._prevSection && this._prevSection.end) {
                 if (this._prevSection.ended) {
                     this._prevSection.ended.addOnce(this.endedPrevSection.dispatch, this.endedPrevSection, Infinity);
+                } else {
+                    //ensure it will always dispatch signal
+                    this.endedPrevSection.dispatch();
                 }
-                if (this._prevSection.end) {
-                    this._prevSection.end();
-                }
+                this._prevSection.end();
             } else {
                 //ensure it will always dispatch signal
                 this.endedPrevSection.dispatch();
