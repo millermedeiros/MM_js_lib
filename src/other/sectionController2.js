@@ -5,7 +5,7 @@
  * sections should implement `init(urlParamsArr)` method or be a constructor.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.7.2 (2012/01/03)
+ * @version 0.7.3 (2012/04/10)
  * @author Miller Medeiros
  */
 define(
@@ -22,8 +22,12 @@ define(
 
         exports._afterRoutesSetup = function () {
             hasher.initialized.add(this._onHasherInit, this);
-            hasher.changed.add(this.router.parse, this.router);
+            hasher.changed.add(this._parseHash, this);
             hasher.init();
+        };
+
+        exports._parseHash = function(newHash, oldHash) {
+            this.router.parse(newHash);
         };
 
         exports._onHasherInit = function (hash) {
