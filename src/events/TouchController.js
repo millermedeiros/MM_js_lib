@@ -18,15 +18,15 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
         return _isTouch? evt.targetTouches[0] : evt;
     }
 
-    function getTime(){
+    var getTime = (typeof Date.now === 'function')? Date.now : function(){
         return (new Date()).getTime();
-    }
+    };
 
     // TOUCH CONTROLLER ========
 
     /**
      * Touch events abstraction
-     * @version 0.3.3 (2011/12/07)
+     * @version 0.4.0 (2012/04/15)
      * @author Miller Medeiros
      */
     function TouchController(targetElm){
@@ -40,6 +40,9 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
         this.touchStarted = new signals.Signal();
         this.touchMoved = new signals.Signal();
         this.touchEnded = new signals.Signal();
+
+        this._startPos = {x:0, y:0};
+        this._changePos = {x:0, y:0};
 
         eventFacade.addListener(targetElm, _startType, this._touchStartHandler);
     }
@@ -77,16 +80,12 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
     function _touchEndHandler(evt){
         evt = eventFacade.getEvent(evt);
 
-        var duration = getTime() - this._touchStartTime,
-            momentum = {
-                x : this._changePos.x / duration,
-                y : this._changePos.y / duration
-            };
+        var duration = getTime() - this._touchStartTime;
 
         eventFacade.removeListener(document, _moveType, this._touchMoveHandler, false);
         eventFacade.removeListener(document, _endType, this._touchEndHandler, false);
 
-        this.touchEnded.dispatch(evt, this._changePos, momentum, duration);
+        this.touchEnded.dispatch(evt, this._changePos, duration);
     }
 
     TouchController.IS_TOUCH_ENABLED = _isTouch;
@@ -94,8 +93,6 @@ define(['signals', '../browser/eventFacade'], function(signals, eventFacade){
     TouchController.prototype = {
 
         _touchStartTime : null,
-        _startPos : {x:0,y:0},
-        _changePos : {x:0,y:0},
 
         dispose : function(){
             if(! this._target) return;

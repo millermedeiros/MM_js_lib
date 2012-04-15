@@ -20,7 +20,7 @@ define([
         /**
          * Scroll Pane - scrollable touch container
          * it will use CSS transforms if available or fallback to jQuery
-         * @version 0.3.1 (2011/12/07)
+         * @version 0.3.2 (2012/04/15)
          * @author Miller Medeiros
          */
         function ScrollPane(frameElm, contentHolder, numPanes){
@@ -78,19 +78,22 @@ define([
 
             _touchMoveHandler : function(evt, changePos){
                 var cx = changePos.x,
-                    friction = ((this.currentPane === 0 && cx > 0) || (this.currentPane === this.numPanes - 1 && cx < 0))? 1 - (Math.abs(cx)/this._paneWidth) / 2 : 1;
+                    friction;
 
-                this._slideTo(this._touchStartX + cx * friction, false, 0);
+                if ((this.currentPane === 0 && cx < this._paneWidth) || (this.currentPane === this.numPanes - 1 && cx > -this._paneWidth)) {
+                    friction = ((this.currentPane === 0 && cx > 0) || (this.currentPane === this.numPanes - 1 && cx < 0))? 1 - (Math.abs(cx)/this._paneWidth) / 2 : 1;
+                    this._slideTo(this._touchStartX + cx * friction, false, 0);
+                }
 
                 if(this.lockScroll){
                     evt.preventDefault();
                 }
             },
 
-            _touchEndHandler : function(evt, changePos, momentum, duration){
+            _touchEndHandler : function(evt, changePos, duration){
                 var inc = 0,
                     cx = changePos.x,
-                    mx = momentum.x;
+                    mx = cx / duration;
 
                 if(Math.abs(cx) < this._paneWidth * 0.4){
                     inc = (mx < -0.5)? 1 : ((mx > 0.5)? -1 : 0);

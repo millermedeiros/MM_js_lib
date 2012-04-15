@@ -3,7 +3,7 @@ define(['signals', './TouchController'], function(signals, TouchController){
     /**
      * Helper for swipe gestures
      * @author Miller Medeiros
-     * @version 0.1.0 (2011/10/14)
+     * @version 0.1.1 (2012/04/15)
      */
     function SwipeController(targetElm, opts){
         var tc = new TouchController(targetElm),
@@ -27,7 +27,7 @@ define(['signals', './TouchController'], function(signals, TouchController){
 
     SwipeController.prototype = {
 
-        _endedHandler : function(evt, changePos, momentum, duration){
+        _endedHandler : function(evt, changePos, duration){
             var distX = Math.abs(changePos.x),
                 distY = Math.abs(changePos.y),
                 isVertical = (distY > distX),
@@ -40,7 +40,7 @@ define(['signals', './TouchController'], function(signals, TouchController){
             }
 
             if(signal){
-                signal.dispatch.call(signal, changePos, momentum, duration);
+                signal.dispatch.call(signal, changePos, duration);
             }
         },
 
