@@ -5,7 +5,7 @@
  * sections should implement `init(urlParamsArr)` method or be a constructor.
  * `end()`, `ended:Signal`, `initialized:Signal` will be only used if available.
  * ---
- * @version 0.7.3 (2012/04/10)
+ * @version 0.7.4 (2012/05/23)
  * @author Miller Medeiros
  */
 define(
@@ -31,8 +31,11 @@ define(
         };
 
         exports._onHasherInit = function (hash) {
-            if(! hash){
-                hasher.replaceHash(this.DEFAULT_ROUTE || '');
+            if(! hash && this.DEFAULT_ROUTE){
+                // only replace hash if default route isn't empty, if empty
+                // it should parse the hash value (which can be an empty string
+                // as well)
+                hasher.replaceHash(this.DEFAULT_ROUTE);
             } else {
                 this.router.parse(hash);
             }
