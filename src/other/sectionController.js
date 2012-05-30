@@ -27,7 +27,7 @@
  *
  * ============================================================================
  *
- * @version 0.11.1 (2012/04/12)
+ * @version 0.12.0 (2012/04/02)
  * @author Miller Medeiros
  */
 define(
@@ -245,6 +245,7 @@ define(
             this._prevModule = mod;
 
             this._prevUid = this._uid(this._destId, this._destParams);
+            this._prevId = this._destId;
         };
 
         exports._listenInit = function(section, initializedParams) {
@@ -263,19 +264,23 @@ define(
         };
 
         exports._endPrevSection = function () {
-            if (this._prevSection && this._prevSection.end) {
+            if (this._prevSection) {
                 if (this._prevSection.ended) {
-                    this._prevSection.ended.addOnce(this.endedPrevSection.dispatch, this.endedPrevSection, Infinity);
-                } else {
-                    //ensure it will always dispatch signal
-                    this.endedPrevSection.dispatch();
+                    this._prevSection.ended.addOnce(this._dispatchPrevEnded, this, Infinity);
                 }
-                this._prevSection.end();
+                if (this._prevSection.end) {
+                    this._prevSection.end();
+                }
             } else {
                 //ensure it will always dispatch signal
-                this.endedPrevSection.dispatch();
+                exports._dispatchPrevEnded();
             }
             this._prevSection = this._prevModule = this._prevUid = null;
+        };
+
+        exports._dispatchPrevEnded = function(){
+            // make sure we dispatch prevId
+            this.endedPrevSection.dispatch(this._prevId);
         };
 
     }

@@ -9,7 +9,7 @@ define(
         /**
          * SpriteSheet Animation Timeline.
          * @author Miller Medeiros
-         * @version 0.9.3 (2012/03/21)
+         * @version 0.10.0 (2012/04/04)
          */
         function SpriteAnim (opts) {
 
@@ -64,6 +64,7 @@ define(
         SpriteAnim.NORMAL = 1;
         SpriteAnim.LOOP = 2;
         SpriteAnim.ALTERNATE = 3;
+        SpriteAnim.ONLY_FORWARD = 4;
 
         SpriteAnim.prototype = {
 
@@ -110,7 +111,11 @@ define(
             _onTick : function(){
                 var n = (this._curFrame + this._speed) >>> 0; //toUint
 
-                if (  (this._speed > 0 && n <= this._stopAt) || (this._speed < 0 && n >= this._stopAt) ) {
+                if (this.playMode === SpriteAnim.ONLY_FORWARD) {
+                    n = n > this._endAt? this._startAt : n;
+                }
+
+                if (  (this._speed > 0 && n <= this._stopAt) || (this._speed < 0 && n >= this._stopAt) || (this.playMode === SpriteAnim.ONLY_FORWARD && this._curFrame !== this._stopAt)) {
                     this.goTo(n);
                 } else {
                     if (this.playMode === SpriteAnim.ALTERNATE) {
@@ -125,7 +130,11 @@ define(
 
             playTo : function (n) {
                 this._stopAt = clamp(n || 1, 1, this._frameCount);
-                this._speed = (n > this._curFrame)? 1 : -1;
+                if (this.playMode === SpriteAnim.ONLY_FORWARD) {
+                    this._speed = 1;
+                } else {
+                    this._speed = (n > this._curFrame)? 1 : -1;
+                }
                 this._play();
             },
 
