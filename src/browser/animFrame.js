@@ -8,7 +8,7 @@ define(['exports', './vendorPrefix'], function (exports, vendorPrefix) {
      * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
      * https://gist.github.com/1002116
      * @author Miller Medeiros
-     * @version 0.2.1 (2012/03/21)
+     * @version 0.2.2 (2012/05/29)
      */
 
     var _win = window,
@@ -44,7 +44,11 @@ define(['exports', './vendorPrefix'], function (exports, vendorPrefix) {
             var startTime = _now(),
                 //use object to store intervalId value since it's passed by reference
                 intervalId = {},
-                loop = function (timestamp) {
+                loop = function () {
+                    // requestAnimationFrame spec changed recently so it can't
+                    // use the value passed to callback
+                    // see: https://code.google.com/p/chromium/issues/detail?id=126495
+                    var timestamp = _now();
                     intervalId.value = exports.requestAnimFrame(loop);
                     if(timestamp - startTime >= delay) {
                         fn.call();
