@@ -27,7 +27,7 @@
  *
  * ============================================================================
  *
- * @version 0.12.0 (2012/04/02)
+ * @version 0.13.0 (2012/06/20)
  * @author Miller Medeiros
  */
 define(
@@ -44,14 +44,19 @@ define(
 
         // SIGNALS ---
 
+        exports.initialized = new signals.Signal();
+        exports.initialized.memorize = true;
+
         exports.initializedChange = new signals.Signal();
         exports.endedPrevSection = new signals.Signal();
         exports._loadedDestSection = new signals.Signal();
-        exports._endedAndLoaded = new CompoundSignal(exports.endedPrevSection, exports._loadedDestSection);
-        exports.initializedDestSection = new signals.Signal();
 
+        exports._endedAndLoaded = new CompoundSignal(exports.endedPrevSection, exports._loadedDestSection);
         exports._endedAndLoaded.memorize = false;
         exports._endedAndLoaded.unique = false;
+
+        exports.initializedDestSection = new signals.Signal();
+
 
 
         // SETTINGS ---
@@ -116,6 +121,7 @@ define(
         //make it easier to overwrite behavior
         exports._afterRoutesSetup = function () {
             this.goTo(this.DEFAULT_ROUTE);
+            this.initialized.dispatch(this.DEFAULT_ROUTE);
         };
 
         exports.goTo = function (paths) {
@@ -126,11 +132,21 @@ define(
         exports.router = crossroads.create();
         exports.router.shoulTypecast = false;
         exports.router.normalizeFn = function (req, vals) {
-            //will dispatch a single parameter (Array) with all the values.
-            return [vals.vals_];
+            //it should dispatch request + Array with all the values.
+            return [req, vals.vals_];
         };
 
         // ---
+
+        // internal properties
+        exports._descriptor   = null;
+        exports._prevUid      = null;
+        exports._prevId       = null;
+        exports._prevSection  = null;
+        exports._prevModule   = null;
+        exports._destId       = null;
+        exports._destModuleId = null;
+        exports._destParams   = null;
 
 
         exports._setupRoutes = function () {
@@ -164,13 +180,13 @@ define(
          * @param {string} sectionId Path to section
          * @param {array} params Params that will be passed to constructor
          */
-        exports._changeSection = function (sectionId, params) {
+        exports._changeSection = function (sectionId, req, params) {
 
             if (this._prevUid === this._uid(sectionId, params)) {
                 return;
             }
 
-            this.initializedChange.dispatch(sectionId, params);
+            this.initializedChange.dispatch(req, sectionId, params);
 
             var destDescription = this._getSectionDescriptionById(sectionId),
                 defaultParams = destDescription.params || [],
@@ -215,10 +231,11 @@ define(
         };
 
         exports._loadSection = function (moduleId) {
+            var self = this;
             require([moduleId], function(){
                 //only dispatch if loaded section is same as destination
-                if(moduleId === exports._destModuleId){
-                    exports._loadedDestSection.dispatch();
+                if(moduleId === self._destModuleId){
+                    self._loadedDestSection.dispatch();
                 }
             });
         };
@@ -264,24 +281,26 @@ define(
         };
 
         exports._endPrevSection = function () {
-            if (this._prevSection) {
+            if (this._prevSection && this._prevSection.end) {
                 if (this._prevSection.ended) {
                     this._prevSection.ended.addOnce(this._dispatchPrevEnded, this, Infinity);
+                } else {
+                    //ensure it will always dispatch signal
+                    this._dispatchPrevEnded();
                 }
-                if (this._prevSection.end) {
-                    this._prevSection.end();
-                }
+                this._prevSection.end();
             } else {
                 //ensure it will always dispatch signal
-                exports._dispatchPrevEnded();
+                this._dispatchPrevEnded();
             }
-            this._prevSection = this._prevModule = this._prevUid = null;
         };
 
         exports._dispatchPrevEnded = function(){
             // make sure we dispatch prevId
             this.endedPrevSection.dispatch(this._prevId);
+            this._prevSection = this._prevModule = this._prevUid = this._prevId = null;
         };
+
 
     }
 );
