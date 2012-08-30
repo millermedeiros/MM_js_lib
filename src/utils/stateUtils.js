@@ -9,7 +9,7 @@ define(
         // wanted to keep it standalone so avoided using amd-utils methods
         // ---
         // author: Miller Medeiros
-        // version: 0.2.0 (2012/08/29)
+        // version: 0.2.1 (2012/08/30)
         // license: MIT
 
         var _stateList;
@@ -46,6 +46,7 @@ define(
                 [ "MO", "Missouri",             [ 63000, 65999 ] ],
                 [ "MT", "Montana",              [ 59000, 59999 ] ],
                 [ "NE", "Nebraska",             [ 68000, 69999, 88900, 89999 ] ],
+                [ "NV", "Nevada",               [ 89000, 89899 ] ],
                 [ "NJ", "New Jersey",           [ 7000, 8999 ] ],
                 [ "NH", "New Hampshire",        [ 3000, 3899 ] ],
                 [ "NM", "New Mexico",           [ 87000, 88499 ] ],
