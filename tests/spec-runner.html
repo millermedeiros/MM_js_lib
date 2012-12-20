@@ -16,7 +16,8 @@
             require({
                 baseUrl : 'spec',
                 paths : {
-                    'src' : '../../src'
+                    'src' : '../../src',
+                    'amd-utils' : '../../lib/amd-utils/src'
                 },
                 waitSeconds : (location.protocol === 'file:' || location.href.indexOf('://localhost') !== -1)? 5 : 45, //fail early locally
                 urlArgs : 'bust='+ (+new Date)
@@ -25,7 +26,12 @@
             //init
             require(
                 [
-                    'spec-linkedList'
+                    'spec-linkedList',
+                    'financial/spec-compoundInterest',
+                    'financial/spec-futureValue',
+                    'financial/spec-npv',
+                    'financial/spec-payment',
+                    'financial/spec-presentValue'
                 ],
                 function(){
                     jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
