@@ -33,6 +33,8 @@ define(['src/financial/npv', 'amd-utils/number/enforcePrecision'], function (npv
 
         it('should work if rate is zero', function () {
             expect( npv(0, [100, 100, 100]) ).toFinanciallyEqual( 300 );
+            expect( npv(0, [55, 500, 1000]) ).toFinanciallyEqual( 1555 );
+            expect( npv(0, [-55, -500, -1000]) ).toFinanciallyEqual( -1555 );
         });
 
     });

@@ -45,6 +45,8 @@ define(['src/financial/payment', 'amd-utils/number/enforcePrecision'], function 
         it('should work with zero rate', function () {
             expect( payment(0, 10, 1000) ).toFinanciallyEqual( 100 );
             expect( payment(0, 10, 1000, 500) ).toFinanciallyEqual( 150 );
+            expect( payment(0, 15, 50000, 1988082) ).toFinanciallyEqual( 135872.13 );
+            expect( payment(0, 15, 50000, -1988082) ).toFinanciallyEqual( -129205.47 );
         });
 
         it('should work with negative values', function () {

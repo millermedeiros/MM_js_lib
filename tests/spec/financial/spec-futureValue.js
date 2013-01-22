@@ -39,6 +39,10 @@ define(['src/financial/futureValue', 'amd-utils/number/enforcePrecision'], funct
             expect( futureValue(0.0, 25, 2400, null, true) ).toFinanciallyEqual( 60000 );
         });
 
+        it('should take present value into consideration even if rate is zero', function () {
+            expect( futureValue(0.0, 25, 2400, 5000) ).toFinanciallyEqual( 65000 );
+        });
+
         it('should decrement the value if rate is negative (deflation)', function () {
             expect( futureValue(-0.06, 25, 2400) ).toFinanciallyEqual( 31483.59  );
             expect( futureValue(-0.06, 25, 2400, null, true) ).toFinanciallyEqual( 29594.58  );
