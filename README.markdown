@@ -7,12 +7,12 @@ My Modular JavaScript Library
 **IMPORTANT: This Library is on an EARLY ALPHA state, the API is constantly changing.**
 
 A **good part of this library will be refactored and moved over** to the
-[amd-utils repository](https://github.com/millermedeiros/amd-utils/) or to the
+[mout repository](https://github.com/mout/mout/) or to the
 [requirejs-plugins repository](https://github.com/millermedeiros/requirejs-plugins),
 be sure to check them as well.
 
 Code here may depend on modules from
-[amd-utils](https://github.com/millermedeiros/amd-utils/) and other third-party
+[mout](https://github.com/millermedeiros/mout/) and other third-party
 libraries, run `git submodule init` and `git submodule update` after cloning
 the repository.
 

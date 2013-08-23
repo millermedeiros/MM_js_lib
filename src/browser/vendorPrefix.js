@@ -1,7 +1,7 @@
 define([
-       'amd-utils/string/pascalCase',
-       'amd-utils/string/camelCase',
-       'amd-utils/string/hyphenate'
+       'mout/string/pascalCase',
+       'mout/string/camelCase',
+       'mout/string/hyphenate'
     ],
     function(pascalCase, camelCase, hyphenate){
 

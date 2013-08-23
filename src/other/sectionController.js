@@ -37,8 +37,8 @@ define(
         'signals',
         'crossroads',
         'CompoundSignal',
-        'amd-utils/string/makePath',
-        'amd-utils/lang/ctorApply'
+        'mout/string/makePath',
+        'mout/lang/ctorApply'
     ],
     function (require, exports, signals, crossroads, CompoundSignal, makePath, ctorApply) {
 

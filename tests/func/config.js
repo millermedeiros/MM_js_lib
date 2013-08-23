@@ -3,7 +3,7 @@ require = {
     paths : {
         'src' : '../../../src/',
         'lib' : '../../../lib',
-        'amd-utils' : '../../../lib/amd-utils/src',
+        'mout' : '../../../lib/mout/src',
         'signals' : '../../../lib/signals',
         'json' : '../../../lib/requirejs-plugins/src/json',
         'text' : '../../lib/requirejs/text'

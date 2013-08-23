@@ -1,9 +1,9 @@
 define(
     [
-        'amd-utils/lang/createObject',
-        'amd-utils/math/countSteps',
-        'amd-utils/math/clamp',
-        'amd-utils/number/toUInt',
+        'mout/lang/createObject',
+        'mout/math/countSteps',
+        'mout/math/clamp',
+        'mout/number/toUInt',
         './SpriteAnim'
     ],
     function(createObject, countSteps, clamp, toUInt, SpriteAnim){

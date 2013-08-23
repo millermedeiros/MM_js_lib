@@ -2,8 +2,8 @@ define([
        'signals',
        '../events/TouchController',
        '../browser/vendorPrefix',
-       'amd-utils/math/clamp',
-       'amd-utils/math/loop'
+       'mout/math/clamp',
+       'mout/math/loop'
     ],
     function(signals, TouchController, vendorPrefix, clamp, loop){
 

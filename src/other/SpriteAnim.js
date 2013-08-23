@@ -1,7 +1,7 @@
 define(
     [
         'signals',
-        'amd-utils/math/clamp',
+        'mout/math/clamp',
         '../browser/animFrame'
     ],
     function (signals, clamp, animFrame) {

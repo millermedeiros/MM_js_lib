@@ -1,7 +1,7 @@
 define(
     [
         'signals',
-        'amd-utils/object/fillIn'
+        'mout/object/fillIn'
     ],
     function (signals, fillIn) {
 

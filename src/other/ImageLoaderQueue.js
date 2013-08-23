@@ -1,8 +1,8 @@
 define(
     [
        'signals',
-       'amd-utils/lang/toArray',
-       'amd-utils/array/append'
+       'mout/lang/toArray',
+       'mout/array/append'
     ],
     function(Signal, toArray, append){
 

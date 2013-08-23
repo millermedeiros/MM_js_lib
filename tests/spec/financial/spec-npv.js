@@ -1,4 +1,4 @@
-define(['src/financial/npv', 'amd-utils/number/enforcePrecision'], function (npv, enforcePrecision) {
+define(['src/financial/npv', 'mout/number/enforcePrecision'], function (npv, enforcePrecision) {
 
     describe('financial/npv()', function () {
 

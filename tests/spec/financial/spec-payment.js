@@ -1,4 +1,4 @@
-define(['src/financial/payment', 'amd-utils/number/enforcePrecision'], function (payment, enforcePrecision) {
+define(['src/financial/payment', 'mout/number/enforcePrecision'], function (payment, enforcePrecision) {
 
     describe('financial/payment()', function () {
 
