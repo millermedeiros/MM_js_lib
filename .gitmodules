@@ -1,6 +1,3 @@
-[submodule "lib/amd-utils"]
-	path = lib/amd-utils
-	url = git://github.com/millermedeiros/amd-utils.git
 [submodule "lib/requirejs-plugins"]
 	path = lib/requirejs-plugins
 	url = gh:millermedeiros/requirejs-plugins.git
