@@ -27,7 +27,7 @@
  *
  * ============================================================================
  *
- * @version 0.13.0 (2012/06/20)
+ * @version 0.13.1 (2013/10/08)
  * @author Miller Medeiros
  */
 define(
@@ -284,11 +284,12 @@ define(
             if (this._prevSection && this._prevSection.end) {
                 if (this._prevSection.ended) {
                     this._prevSection.ended.addOnce(this._dispatchPrevEnded, this, Infinity);
-                } else {
+                }
+                this._prevSection.end();
+                if (!this._prevSection.ended) {
                     //ensure it will always dispatch signal
                     this._dispatchPrevEnded();
                 }
-                this._prevSection.end();
             } else {
                 //ensure it will always dispatch signal
                 this._dispatchPrevEnded();
